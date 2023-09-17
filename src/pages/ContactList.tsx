@@ -255,11 +255,11 @@ const searchContactBar = {
 	inputSearch: css({
 		width: "100%",
 		border: "none",
-		color: "#6a6a6a",
 		fontSize: "1.2rem",
 		borderRadius: "1.9rem",
 		padding: "1rem 3.4rem",
-		backgroundColor: "#f2f3f4"
+		backgroundColor: "#f2f3f4",
+		color: "var(--secondary-text-color)"
 	}),
 
 	buttonSearchWrapper: css({
@@ -299,15 +299,15 @@ const favoriteContact = {
 	}),
 
 	title: css({
-		color: "#4a4a4a",
-		fontSize: "1.5rem"
+		fontSize: "1.5rem",
+		color: "var(--primary-text-color)"
 	}),
 
 	contactItem: css({
 		borderRadius: "0.4rem",
 		marginBottom: "1.2rem",
 		padding: "1rem 1.7rem",
-		border: "0.1rem solid #f2f3f4",
+		border: "0.1rem solid var(--border-color)",
 
 		"&:last-child": {
 			marginBottom: "0"
@@ -349,14 +349,14 @@ const favoriteContact = {
 	}),
 
 	contactItemName: css({
-		color: "#4a4a4a",
 		fontSize: "1.4rem",
-		marginBottom: "0.1rem"
+		marginBottom: "0.1rem",
+		color: "var(--primary-text-color)"
 	}),
 
 	contactItemNumber: css({
-		color: "#4a4a4a",
-		fontSize: "1.3rem"
+		fontSize: "1.3rem",
+		color: "var(--primary-text-color)"
 	}),
 
 	contactItemMenus: css({
@@ -382,9 +382,9 @@ const favoriteContact = {
 		},
 
 		span: {
-			color: "#6a6a6a",
 			fontSize: "1.2rem",
-			marginTop: "0.4rem"
+			marginTop: "0.4rem",
+			color: "var(--secondary-text-color)"
 		}
 	})
 };
@@ -398,8 +398,8 @@ const allContactCSS = {
 	}),
 
 	title: css({
-		color: "#4a4a4a",
-		fontSize: "1.5rem"
+		fontSize: "1.5rem",
+		color: "var(--primary-text-color)"
 	})
 };
 
@@ -421,8 +421,8 @@ const loadMore = {
 		backgroundColor: "transparent",
 
 		div: {
-			color: "#4a4a4a",
-			fontSize: "1.4rem"
+			fontSize: "1.4rem",
+			color: "var(--secondary-text-color)"
 		},
 
 		svg: {
