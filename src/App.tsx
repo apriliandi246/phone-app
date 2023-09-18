@@ -3,9 +3,9 @@
 import { Route, Routes } from "react-router-dom";
 import { jsx, css } from "@emotion/react/macro";
 
-import ContactList from "./pages/ContactList";
-import EditContact from "./pages/EditContact";
-import NewContact from "./pages/NewContact";
+import ContactList from "./pages/home";
+import EditContact from "./pages/edit-contact";
+import NewContact from "./pages/add-contact";
 
 function App() {
 	return (

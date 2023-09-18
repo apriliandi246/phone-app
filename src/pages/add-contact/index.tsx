@@ -3,12 +3,12 @@
 import { jsx, css } from "@emotion/react/macro";
 import { Link } from "react-router-dom";
 
-function EditContact() {
+function NewContact() {
 	return (
 		<div>
 			<header css={header.self}>
 				<Link to="/" css={header.back}>
-					<svg width="14" height="24" viewBox="0 0 28 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<svg width="13" height="23" viewBox="0 0 28 46" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path
 							d="M25.84 38.52L10.32 23L25.84 7.47998C27.4 5.91998 27.4 3.39998 25.84 1.83998C24.28 0.279983 21.76 0.279983 20.2 1.83998L1.84001 20.2C0.280013 21.76 0.280013 24.28 1.84001 25.84L20.2 44.2C21.76 45.76 24.28 45.76 25.84 44.2C27.36 42.64 27.4 40.08 25.84 38.52Z"
 							fill="#989898"
@@ -16,7 +16,7 @@ function EditContact() {
 					</svg>
 				</Link>
 
-				<div css={header.title}>Edit Contact</div>
+				<div css={header.title}>Add New Contact</div>
 			</header>
 
 			<form css={form.wrapper}>
@@ -44,6 +44,7 @@ const header = {
 	}),
 
 	title: css({
+		fontWeight: "600",
 		fontSize: "1.6rem",
 		color: "var(--primary-text-color)"
 	})
@@ -63,10 +64,10 @@ const form = {
 		backgroundColor: "#fff",
 		backgroundSize: "1.6rem",
 		backgroundRepeat: "no-repeat",
-		border: "0.1rem solid #9ca3af",
 		color: "var(--primary-text-color)",
 		padding: "0.8rem 1.4rem 0.8rem 4.4rem",
-		backgroundPosition: "left 1.6rem center"
+		backgroundPosition: "left 1.6rem center",
+		border: "0.1rem solid var(--border-color)"
 	}),
 
 	inputIconContactName: css({
@@ -80,19 +81,10 @@ const form = {
 	submitBtn: css({
 		width: "100%",
 		borderRadius: "0.4rem",
-		backgroundColor: "#fff",
 		padding: "0.8rem 1.4rem",
-		border: "0.1rem solid #9ca3af",
 		transition: "background-color 100ms",
-
-		":hover": {
-			backgroundColor: "#e3e3e3"
-		},
-
-		":active": {
-			backgroundColor: "#d1d7db"
-		}
+		border: "0.1rem solid var(--border-color)"
 	})
 };
 
-export default EditContact;
+export default NewContact;
