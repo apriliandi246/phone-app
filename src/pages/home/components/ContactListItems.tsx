@@ -5,13 +5,29 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 function ContactListItems() {
+	const [itemSelected, setItemSelected] = useState(-1);
 	const [contacts, setContact] = useState([1, 2, 3, 4, 5]);
+
+	function toggle(index: number): void {
+		if (index === itemSelected) {
+			setItemSelected(-1);
+		} else {
+			setItemSelected(index);
+		}
+	}
 
 	return (
 		<div>
-			{contacts.map((contact) => (
+			{contacts.map((contact, index) => (
 				<div key={contact} css={contactListItem.contactItem}>
-					<button type="button" css={contactListItem.contactItemBtn}>
+					<button
+						type="button"
+						onClick={() => toggle(index)}
+						css={contactListItem.contactItemBtn}
+						style={{
+							borderBottomLeftRadius: itemSelected === index ? "0" : "inherit",
+							borderBottomRightRadius: itemSelected === index ? "0" : "inherit"
+						}}>
 						<div css={contactListItem.contactItemAvatar}>f</div>
 
 						<div css={contactListItem.contactItemData}>
@@ -21,46 +37,48 @@ function ContactListItems() {
 
 						<svg width="13" height="13" viewBox="0 0 46 28" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path
-								d="M38.52 2.15999L23 17.68L7.48004 2.15999C5.92004 0.59999 3.40004 0.59999 1.84004 2.15999C0.280044 3.71999 0.280044 6.23999 1.84004 7.79999L20.2 26.16C21.76 27.72 24.28 27.72 25.84 26.16L44.2 7.79999C45.76 6.23999 45.76 3.71999 44.2 2.15999C42.64 0.63999 40.08 0.59999 38.52 2.15999Z"
+								d="M38.52 2.16 23 17.68 7.48 2.16a3.983 3.983 0 0 0-5.64 0 3.983 3.983 0 0 0 0 5.64L20.2 26.16a3.983 3.983 0 0 0 5.64 0L44.2 7.8a3.983 3.983 0 0 0 0-5.64c-1.56-1.52-4.12-1.56-5.68 0Z"
 								fill="#6a6a6a"
 							/>
 						</svg>
 					</button>
 
-					<div css={contactListItem.contactItemMenus}>
-						<button css={contactListItem.contactItemMenu}>
-							<svg width="18" height="18" viewBox="0 0 70 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path
-									d="M65.6 22.16L46.24 20.48L38.68 2.68C37.32 -0.56 32.68 -0.56 31.32 2.68L23.76 20.52L4.43999 22.16C0.919986 22.44 -0.520015 26.84 2.15999 29.16L16.84 41.88L12.44 60.76C11.64 64.2 15.36 66.92 18.4 65.08L35 55.08L51.6 65.12C54.64 66.96 58.36 64.24 57.56 60.8L53.16 41.88L67.84 29.16C70.52 26.84 69.12 22.44 65.6 22.16ZM35 47.6L19.96 56.68L23.96 39.56L10.68 28.04L28.2 26.52L35 10.4L41.84 26.56L59.36 28.08L46.08 39.6L50.08 56.72L35 47.6Z"
-									fill="#6a6a6a"
-								/>
-							</svg>
+					{itemSelected === index && (
+						<div css={contactListItem.contactItemMenus}>
+							<button css={contactListItem.contactItemMenu}>
+								<svg width="18" height="18" viewBox="0 0 70 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="m65.6 22.16-19.36-1.68-7.56-17.8c-1.36-3.24-6-3.24-7.36 0l-7.56 17.84-19.32 1.64c-3.52.28-4.96 4.68-2.28 7l14.68 12.72-4.4 18.88c-.8 3.44 2.92 6.16 5.96 4.32l16.6-10 16.6 10.04c3.04 1.84 6.76-.88 5.96-4.32l-4.4-18.92 14.68-12.72c2.68-2.32 1.28-6.72-2.24-7ZM35 47.6l-15.04 9.08 4-17.12-13.28-11.52 17.52-1.52L35 10.4l6.84 16.16 17.52 1.52L46.08 39.6l4 17.12L35 47.6Z"
+										fill="#6a6a6a"
+									/>
+								</svg>
 
-							<span>Favorite</span>
-						</button>
+								<span>Favorite</span>
+							</button>
 
-						<Link to="/edit-contact" css={contactListItem.contactItemMenu}>
-							<svg width="16" height="16" viewBox="0 0 73 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path
-									d="M0 58.84V71C0 72.12 0.88 73 2 73H14.16C14.68 73 15.2 72.8 15.56 72.4L59.24 28.76L44.24 13.76L0.6 57.4C0.2 57.8 0 58.28 0 58.84ZM70.84 17.16C72.4 15.6 72.4 13.08 70.84 11.52L61.48 2.15999C59.92 0.59999 57.4 0.59999 55.84 2.15999L48.52 9.47999L63.52 24.48L70.84 17.16Z"
-									fill="#6a6a6a"
-								/>
-							</svg>
+							<Link to="/edit-contact" css={contactListItem.contactItemMenu}>
+								<svg width="16" height="16" viewBox="0 0 73 73" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="M0 58.84V71c0 1.12.88 2 2 2h12.16c.52 0 1.04-.2 1.4-.6l43.68-43.64-15-15L.6 57.4c-.4.4-.6.88-.6 1.44Zm70.84-41.68a3.983 3.983 0 0 0 0-5.64l-9.36-9.36a3.983 3.983 0 0 0-5.64 0l-7.32 7.32 15 15 7.32-7.32Z"
+										fill="#6a6a6a"
+									/>
+								</svg>
 
-							<span>Edit</span>
-						</Link>
+								<span>Edit</span>
+							</Link>
 
-						<button css={contactListItem.contactItemMenu}>
-							<svg width="16" height="14" viewBox="0 0 56 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path
-									d="M4 64C4 68.4 7.6 72 12 72H44C48.4 72 52 68.4 52 64V24C52 19.6 48.4 16 44 16H12C7.6 16 4 19.6 4 24V64ZM52 4H42L39.16 1.16C38.44 0.44 37.4 0 36.36 0H19.64C18.6 0 17.56 0.44 16.84 1.16L14 4H4C1.8 4 0 5.8 0 8C0 10.2 1.8 12 4 12H52C54.2 12 56 10.2 56 8C56 5.8 54.2 4 52 4Z"
-									fill="#6a6a6a"
-								/>
-							</svg>
+							<button css={contactListItem.contactItemMenu}>
+								<svg width="16" height="14" viewBox="0 0 56 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="M4 64c0 4.4 3.6 8 8 8h32c4.4 0 8-3.6 8-8V24c0-4.4-3.6-8-8-8H12c-4.4 0-8 3.6-8 8v40ZM52 4H42l-2.84-2.84A4.035 4.035 0 0 0 36.36 0H19.64c-1.04 0-2.08.44-2.8 1.16L14 4H4C1.8 4 0 5.8 0 8s1.8 4 4 4h48c2.2 0 4-1.8 4-4s-1.8-4-4-4Z"
+										fill="#6a6a6a"
+									/>
+								</svg>
 
-							<span>Delete</span>
-						</button>
-					</div>
+								<span>Delete</span>
+							</button>
+						</div>
+					)}
 				</div>
 			))}
 		</div>
@@ -83,9 +101,8 @@ const contactListItem = {
 		border: "none",
 		display: "grid",
 		padding: "1rem 1.7rem",
+		borderRadius: "inherit",
 		backgroundColor: "transparent",
-		borderTopLeftRadius: "0.4rem",
-		borderTopRightRadius: "0.4rem",
 		gridTemplateColumns: "repeat(12, 1fr)",
 
 		svg: {
@@ -132,7 +149,7 @@ const contactListItem = {
 		display: "flex",
 		marginTop: "1rem",
 		alignItems: "center",
-		paddingBottom: "1rem",
+		marginBottom: "1rem",
 		paddingInline: "1.7rem",
 		justifyContent: "space-around"
 	}),
