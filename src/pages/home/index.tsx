@@ -1,60 +1,131 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react/macro";
+import { useState, Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import SearchContact from "./components/SearchContact";
 import ContactListItems from "./components/ContactListItems";
 import ModalDeleteConfirmation from "./components/ModalDeleteConfirmation";
-import SkeletonsLoading from "./components/SkeletonsLoading";
 import SpinnerLoading from "./components/SpinnerLoading";
 import LoadMoreButton from "./components/LoadMoreLoadMoreButton";
 
-function ContactList() {
+function Page() {
+	const [isModalDeleteShow, setModalDeleteShowStatus] = useState(false);
+
 	return (
-		<div css={mainContainer.self}>
-			<SearchContact />
+		<Fragment>
+			{isModalDeleteShow === true && <ModalDeleteConfirmation setModalDeleteShowStatus={setModalDeleteShowStatus} />}
 
-			{/* Favorites contact */}
-			<div css={contactlistSection.container}>
-				<div css={contactlistSection.header}>
-					<svg width="16" height="16" viewBox="0 0 69 66" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
-						<path
-							d="M34.2278 54.79L50.8278 64.83C53.8678 66.67 57.5878 63.95 56.7878 60.51L52.3878 41.63L67.0678 28.91C69.7478 26.59 68.3078 22.19 64.7878 21.91L45.4678 20.27L37.9078 2.43C36.5478 -0.81 31.9078 -0.81 30.5478 2.43L22.9878 20.23L3.66783 21.87C0.14783 22.15 -1.29217 26.55 1.38783 28.87L16.0678 41.59L11.6678 60.47C10.8678 63.91 14.5878 66.63 17.6278 64.79L34.2278 54.79Z"
-							fill="#6a6a6a"
-						/>
-					</svg>
+			<div css={mainContainer.self}>
+				<header css={header.self}>
+					<h1 css={header.title}>Contact List</h1>
+					<div css={header.desc}>24 contacts with phone numbers</div>
+				</header>
 
-					<div css={contactlistSection.title}>Favorites</div>
+				<div css={menus.self}>
+					<Link to="/new-contact" css={menus.menu}>
+						<svg width="19" height="19" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M52 32H32v20c0 2.2-1.8 4-4 4s-4-1.8-4-4V32H4c-2.2 0-4-1.8-4-4s1.8-4 4-4h20V4c0-2.2 1.8-4 4-4s4 1.8 4 4v20h20c2.2 0 4 1.8 4 4s-1.8 4-4 4Z"
+								fill="#6a6a6a"
+							/>
+						</svg>
+
+						<span>Add</span>
+					</Link>
+
+					<Link to="/search-contact" css={menus.menu}>
+						<svg width="19" height="19" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M51 45h-3.16l-1.12-1.08c4.8-5.6 7.28-13.24 5.92-21.36-1.88-11.12-11.16-20-22.36-21.36C13.36-.88-.88 13.36 1.2 30.28c1.36 11.2 10.24 20.48 21.36 22.36 8.12 1.36 15.76-1.12 21.36-5.92L45 47.84V51l17 17a4.225 4.225 0 0 0 5.96 0 4.225 4.225 0 0 0 0-5.96L51 45Zm-24 0c-9.96 0-18-8.04-18-18S17.04 9 27 9s18 8.04 18 18-8.04 18-18 18Z"
+								fill="#6a6a6a"
+							/>
+						</svg>
+
+						<span>Search</span>
+					</Link>
 				</div>
 
-				<ContactListItems />
-			</div>
+				{/* Favorites contact */}
+				<div css={contactlistSection.container}>
+					<div css={contactlistSection.header}>
+						<svg width="16" height="16" viewBox="0 0 69 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="m34.228 54.79 16.6 10.04c3.04 1.84 6.76-.88 5.96-4.32l-4.4-18.88 14.68-12.72c2.68-2.32 1.24-6.72-2.28-7l-19.32-1.64-7.56-17.84c-1.36-3.24-6-3.24-7.36 0l-7.56 17.8-19.32 1.64c-3.52.28-4.96 4.68-2.28 7l14.68 12.72-4.4 18.88c-.8 3.44 2.92 6.16 5.96 4.32l16.6-10Z"
+								fill="#6a6a6a"
+							/>
+						</svg>
 
-			{/* All contact */}
-			<div css={contactlistSection.container}>
-				<div css={contactlistSection.header}>
-					<svg width="16" height="16" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M0 8V64C0 68.4 3.56 72 8 72H64C68.4 72 72 68.4 72 64V8C72 3.6 68.4 0 64 0H8C3.56 0 0 3.6 0 8ZM48 24C48 30.64 42.64 36 36 36C29.36 36 24 30.64 24 24C24 17.36 29.36 12 36 12C42.64 12 48 17.36 48 24ZM12 56C12 48 28 43.6 36 43.6C44 43.6 60 48 60 56V60H12V56Z"
-							fill="#6a6a6a"
-						/>
-					</svg>
+						<div css={contactlistSection.title}>Favorites</div>
+					</div>
 
-					<div css={contactlistSection.title}>All</div>
+					<ContactListItems setModalDeleteShowStatus={setModalDeleteShowStatus} />
 				</div>
 
-				<ContactListItems />
-			</div>
+				{/* All contact */}
+				<div css={contactlistSection.container}>
+					<div css={contactlistSection.header}>
+						<svg width="16" height="16" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M0 8v56c0 4.4 3.56 8 8 8h56c4.4 0 8-3.6 8-8V8c0-4.4-3.6-8-8-8H8C3.56 0 0 3.6 0 8Zm48 16c0 6.64-5.36 12-12 12s-12-5.36-12-12 5.36-12 12-12 12 5.36 12 12ZM12 56c0-8 16-12.4 24-12.4S60 48 60 56v4H12v-4Z"
+								fill="#6a6a6a"
+							/>
+						</svg>
 
-			<LoadMoreButton />
-		</div>
+						<div css={contactlistSection.title}>All</div>
+					</div>
+
+					<ContactListItems setModalDeleteShowStatus={setModalDeleteShowStatus} />
+				</div>
+
+				<LoadMoreButton />
+			</div>
+		</Fragment>
 	);
 }
 
 const mainContainer = {
 	self: css({
 		width: "100%"
+	})
+};
+
+const header = {
+	self: css({
+		marginTop: "2rem",
+		textAlign: "center",
+		color: "var(--primary-text-color)"
+	}),
+
+	title: {
+		fontWeight: "600",
+		fontSize: "3.2rem"
+	},
+
+	desc: {
+		fontSize: "1.1rem",
+		color: "var(--secondary-text-color)"
+	}
+};
+
+const menus = {
+	self: css({
+		gap: "2rem",
+		display: "flex",
+		marginTop: "4rem",
+		alignItems: "center",
+		marginBottom: "1rem",
+		justifyContent: "flex-end"
+	}),
+
+	menu: css({
+		gap: "0.5rem",
+		display: "flex",
+		alignItems: "center",
+		flexDirection: "column",
+		color: "var(--primary-text-color)",
+		textDecoration: "none",
+		fontSize: "1.2rem"
 	})
 };
 
@@ -76,4 +147,4 @@ const contactlistSection = {
 	})
 };
 
-export default ContactList;
+export default Page;

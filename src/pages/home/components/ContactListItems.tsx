@@ -4,7 +4,11 @@ import { jsx, css } from "@emotion/react/macro";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-function ContactListItems() {
+interface ContactListItemsProps {
+	setModalDeleteShowStatus: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function ContactListItems({ setModalDeleteShowStatus }: ContactListItemsProps) {
 	const [itemSelected, setItemSelected] = useState(-1);
 	const [contacts, setContact] = useState([1, 2, 3, 4, 5]);
 
@@ -14,6 +18,10 @@ function ContactListItems() {
 		} else {
 			setItemSelected(index);
 		}
+	}
+
+	function showModalDeleteConfirmation() {
+		setModalDeleteShowStatus(true);
 	}
 
 	return (
@@ -67,7 +75,7 @@ function ContactListItems() {
 								<span>Edit</span>
 							</Link>
 
-							<button css={contactListItem.contactItemMenu}>
+							<button css={contactListItem.contactItemMenu} onClick={showModalDeleteConfirmation}>
 								<svg width="16" height="14" viewBox="0 0 56 72" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path
 										d="M4 64c0 4.4 3.6 8 8 8h32c4.4 0 8-3.6 8-8V24c0-4.4-3.6-8-8-8H12c-4.4 0-8 3.6-8 8v40ZM52 4H42l-2.84-2.84A4.035 4.035 0 0 0 36.36 0H19.64c-1.04 0-2.08.44-2.8 1.16L14 4H4C1.8 4 0 5.8 0 8s1.8 4 4 4h48c2.2 0 4-1.8 4-4s-1.8-4-4-4Z"
@@ -147,9 +155,8 @@ const contactListItem = {
 
 	contactItemMenus: css({
 		display: "flex",
-		marginTop: "1rem",
 		alignItems: "center",
-		marginBottom: "1rem",
+		paddingBlock: "1.3rem",
 		paddingInline: "1.7rem",
 		justifyContent: "space-around"
 	}),

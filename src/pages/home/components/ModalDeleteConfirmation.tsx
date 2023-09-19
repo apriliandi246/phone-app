@@ -2,7 +2,15 @@
 /** @jsx jsx */
 import { jsx, css, keyframes } from "@emotion/react/macro";
 
-function ModalDeleteConfirmation() {
+interface ModalDeleteConfirmationProps {
+	setModalDeleteShowStatus: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function ModalDeleteConfirmation({ setModalDeleteShowStatus }: ModalDeleteConfirmationProps) {
+	function closeModalDeleteConfirmation() {
+		setModalDeleteShowStatus(false);
+	}
+
 	return (
 		<div css={modalConfirmation.overlay}>
 			<div css={modalConfirmation.modal}>
@@ -11,7 +19,7 @@ function ModalDeleteConfirmation() {
 				<div css={modalConfirmation.modalBody}>Once you delete this you are not alllowed to restore.</div>
 
 				<div css={modalConfirmation.buttonsWrapper}>
-					<button type="button" css={modalConfirmation.btnCancel}>
+					<button type="button" css={modalConfirmation.btnCancel} onClick={closeModalDeleteConfirmation}>
 						Cancel
 					</button>
 

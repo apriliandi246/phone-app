@@ -3,7 +3,7 @@
 import { jsx, css } from "@emotion/react/macro";
 import { Link } from "react-router-dom";
 
-function NewContact() {
+function Page() {
 	return (
 		<div>
 			<header css={header.self}>
@@ -11,7 +11,7 @@ function NewContact() {
 					<svg width="13" height="23" viewBox="0 0 28 46" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path
 							d="M25.84 38.52 10.32 23 25.84 7.48a3.983 3.983 0 0 0 0-5.64 3.983 3.983 0 0 0-5.64 0L1.84 20.2a3.983 3.983 0 0 0 0 5.64L20.2 44.2a3.983 3.983 0 0 0 5.64 0c1.52-1.56 1.56-4.12 0-5.68Z"
-							fill="#989898"
+							fill="#6a6a6a"
 						/>
 					</svg>
 				</Link>
@@ -87,4 +87,4 @@ const form = {
 	})
 };
 
-export default NewContact;
+export default Page;

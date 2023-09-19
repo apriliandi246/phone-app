@@ -2,8 +2,7 @@
 	--font-family: "Poppins", sans-serif;
 
 	--border-color: #9ca3af;
-
-	--primary-text-color: #4a4a4a;
+	--primary-text-color: #212121;
 	--secondary-text-color: #6a6a6a;
 }
 
@@ -21,7 +20,7 @@ html {
 }
 
 body {
-	background-color: #eaebec;
+	background-color: #fff;
 }
 
 button {
@@ -42,4 +41,19 @@ button:active {
 
 input {
 	font-family: var(--font-family);
+}
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-clear-button {
+	display: none;
+}
+
+input[type="search"]::-moz-search-clear-button {
+	display: none;
+}
+
+input:disabled,
+button:disabled {
+	opacity: 0.66;
+	pointer-events: none;
 }
