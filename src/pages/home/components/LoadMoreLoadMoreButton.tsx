@@ -2,10 +2,12 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react/macro";
 
+import { buttonRegular } from "../../../object-styles/form-groups";
+
 function LoadMoreButton() {
 	return (
 		<div css={loadMoreSection.self}>
-			<button type="button" css={loadMoreSection.button}>
+			<button type="button" css={[buttonRegular, loadMoreSection.button]}>
 				<div>Load more</div>
 
 				<svg width="13" height="13" viewBox="0 0 46 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,15 +34,10 @@ const loadMoreSection = {
 		display: "flex",
 		alignItems: "center",
 		width: "fit-content",
-		borderRadius: "0.4rem",
-		backgroundColor: "#fff",
-		padding: "0.8rem 1.4rem",
 		justifyContent: "center",
-		border: "0.1rem solid #9ca3af",
-		transition: "background-color 100ms",
 
 		div: {
-			fontSize: "1.4rem"
+			fontSize: "inherit"
 		},
 
 		svg: {

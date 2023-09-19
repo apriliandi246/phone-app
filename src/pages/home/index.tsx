@@ -4,17 +4,36 @@ import { jsx, css } from "@emotion/react/macro";
 import { useState, Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import ContactListItems from "./components/ContactListItems";
-import ModalDeleteConfirmation from "./components/ModalDeleteConfirmation";
 import SpinnerLoading from "./components/SpinnerLoading";
+import ContactListItems from "./components/ContactListItems";
 import LoadMoreButton from "./components/LoadMoreLoadMoreButton";
+import ModalDeleteConfirmation from "./components/ModalDeleteConfirmation";
+import SkeletonsLoading from "../../components/SkeletonsLoading";
 
 function Page() {
-	const [isModalDeleteShow, setModalDeleteShowStatus] = useState(false);
+	const [contacts, setContacts] = useState<number[]>([1, 2, 3, 4, 5]);
+	const [isModalDeleteOpen, setModalDeleteOpenStatus] = useState<boolean>(false);
+	const [contactIDModalSelected, setContactIDModalSelected] = useState<number>(-1);
+
+	function deleteContact() {
+		console.log("Delete contact with ID: ", contactIDModalSelected);
+	}
+
+	function openModalDeleteConfirmation() {
+		setModalDeleteOpenStatus(true);
+	}
+
+	function closeModalDeleteConfirmation() {
+		setModalDeleteOpenStatus(false);
+	}
+
+	// return <SkeletonsLoading />;
 
 	return (
 		<Fragment>
-			{isModalDeleteShow === true && <ModalDeleteConfirmation setModalDeleteShowStatus={setModalDeleteShowStatus} />}
+			{isModalDeleteOpen === true && (
+				<ModalDeleteConfirmation onDelete={deleteContact} onClose={closeModalDeleteConfirmation} />
+			)}
 
 			<div css={mainContainer.self}>
 				<header css={header.self}>
@@ -59,7 +78,11 @@ function Page() {
 						<div css={contactlistSection.title}>Favorites</div>
 					</div>
 
-					<ContactListItems setModalDeleteShowStatus={setModalDeleteShowStatus} />
+					<ContactListItems
+						contacts={contacts}
+						openModal={openModalDeleteConfirmation}
+						setContactIDModalSelected={setContactIDModalSelected}
+					/>
 				</div>
 
 				{/* All contact */}
@@ -75,7 +98,11 @@ function Page() {
 						<div css={contactlistSection.title}>All</div>
 					</div>
 
-					<ContactListItems setModalDeleteShowStatus={setModalDeleteShowStatus} />
+					<ContactListItems
+						contacts={contacts}
+						openModal={openModalDeleteConfirmation}
+						setContactIDModalSelected={setContactIDModalSelected}
+					/>
 				</div>
 
 				<LoadMoreButton />

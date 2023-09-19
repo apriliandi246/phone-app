@@ -4,15 +4,18 @@ import { jsx, css } from "@emotion/react/macro";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-interface ContactListItemsProps {
-	setModalDeleteShowStatus: React.Dispatch<React.SetStateAction<boolean>>;
+import { buttonRegular } from "../../../object-styles/form-groups";
+
+interface Props {
+	contacts: number[];
+	openModal: () => void;
+	setContactIDModalSelected: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function ContactListItems({ setModalDeleteShowStatus }: ContactListItemsProps) {
-	const [itemSelected, setItemSelected] = useState(-1);
-	const [contacts, setContact] = useState([1, 2, 3, 4, 5]);
+function ContactListItems({ contacts, openModal, setContactIDModalSelected }: Props) {
+	const [itemSelected, setItemSelected] = useState<number>(-1);
 
-	function toggle(index: number): void {
+	function toggle(index: number) {
 		if (index === itemSelected) {
 			setItemSelected(-1);
 		} else {
@@ -20,8 +23,12 @@ function ContactListItems({ setModalDeleteShowStatus }: ContactListItemsProps) {
 		}
 	}
 
-	function showModalDeleteConfirmation() {
-		setModalDeleteShowStatus(true);
+	function showModalDeleteConfirmation(contactId: number) {
+		const body = document.body;
+		body.style.overflow = "hidden";
+
+		setContactIDModalSelected(contactId);
+		openModal();
 	}
 
 	return (
@@ -31,7 +38,7 @@ function ContactListItems({ setModalDeleteShowStatus }: ContactListItemsProps) {
 					<button
 						type="button"
 						onClick={() => toggle(index)}
-						css={contactListItem.contactItemBtn}
+						css={[buttonRegular, contactListItem.contactItemBtn]}
 						style={{
 							borderBottomLeftRadius: itemSelected === index ? "0" : "inherit",
 							borderBottomRightRadius: itemSelected === index ? "0" : "inherit"
@@ -75,7 +82,7 @@ function ContactListItems({ setModalDeleteShowStatus }: ContactListItemsProps) {
 								<span>Edit</span>
 							</Link>
 
-							<button css={contactListItem.contactItemMenu} onClick={showModalDeleteConfirmation}>
+							<button css={contactListItem.contactItemMenu} onClick={() => showModalDeleteConfirmation(contact)}>
 								<svg width="16" height="14" viewBox="0 0 56 72" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path
 										d="M4 64c0 4.4 3.6 8 8 8h32c4.4 0 8-3.6 8-8V24c0-4.4-3.6-8-8-8H12c-4.4 0-8 3.6-8 8v40ZM52 4H42l-2.84-2.84A4.035 4.035 0 0 0 36.36 0H19.64c-1.04 0-2.08.44-2.8 1.16L14 4H4C1.8 4 0 5.8 0 8s1.8 4 4 4h48c2.2 0 4-1.8 4-4s-1.8-4-4-4Z"
@@ -109,8 +116,6 @@ const contactListItem = {
 		border: "none",
 		display: "grid",
 		padding: "1rem 1.7rem",
-		borderRadius: "inherit",
-		backgroundColor: "transparent",
 		gridTemplateColumns: "repeat(12, 1fr)",
 
 		svg: {
@@ -143,13 +148,13 @@ const contactListItem = {
 	}),
 
 	contactItemName: css({
-		fontSize: "1.4rem",
-		marginBottom: "0.1rem",
+		fontSize: "1.5rem",
+		marginBottom: "0.6rem",
 		color: "var(--primary-text-color)"
 	}),
 
 	contactItemNumber: css({
-		fontSize: "1.3rem",
+		fontSize: "1.4rem",
 		color: "var(--primary-text-color)"
 	}),
 

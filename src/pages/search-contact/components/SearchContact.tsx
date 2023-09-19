@@ -1,31 +1,22 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react/macro";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-interface SearchContactProps {
+interface Props {
 	setFetchingStatus: React.Dispatch<React.SetStateAction<boolean>>;
 	setSearchContactQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function SearchContact({ setFetchingStatus, setSearchContactQuery }: SearchContactProps) {
-	const [inputValue, setInputValue] = useState("");
-	const isInputValueEmpty = inputValue.trimStart() === "";
+function SearchContact({ setFetchingStatus, setSearchContactQuery }: Props) {
+	const [inputValue, setInputValue] = useState<string>("");
+	const isInputValueEmpty: boolean = inputValue.trimStart() === "";
 
-	useEffect(() => {
-		setFetchingStatus(true);
-
-		const timer = setTimeout(() => {
-			setSearchContactQuery(inputValue.trim());
-		}, 400);
-
-		return () => clearTimeout(timer);
-	}, [inputValue]);
-
-	function inputKeyUpHandler(event: any) {
+	function inputKeyUpHandler(event: React.KeyboardEvent<HTMLInputElement>) {
 		if (event.key === "Enter" && inputValue !== "") {
-			console.log("Search = ", inputValue);
+			setFetchingStatus(true);
+			setSearchContactQuery(inputValue);
 		}
 	}
 
@@ -65,9 +56,9 @@ function SearchContact({ setFetchingStatus, setSearchContactQuery }: SearchConta
 				<input
 					type="search"
 					value={inputValue}
+					onKeyUp={inputKeyUpHandler}
 					placeholder="Search contact name"
 					css={searchContactSection.inputSearch}
-					onKeyUp={inputKeyUpHandler}
 					onChange={(event) => setInputValue(event.target.value.trimStart())}
 				/>
 

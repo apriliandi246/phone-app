@@ -1,6 +1,5 @@
 :root {
 	--font-family: "Poppins", sans-serif;
-
 	--border-color: #9ca3af;
 	--primary-text-color: #212121;
 	--secondary-text-color: #6a6a6a;
@@ -25,22 +24,6 @@ body {
 
 button {
 	cursor: pointer;
-	background-color: #fff;
-	font-family: var(--font-family);
-	color: var(--primary-text-color);
-	transition: background-color 100ms;
-}
-
-button:hover {
-	background-color: #e3e3e3;
-}
-
-button:active {
-	background-color: #d1d7db;
-}
-
-input {
-	font-family: var(--font-family);
 }
 
 input[type="search"]::-webkit-search-cancel-button,

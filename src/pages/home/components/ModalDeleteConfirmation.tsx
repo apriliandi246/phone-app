@@ -2,13 +2,23 @@
 /** @jsx jsx */
 import { jsx, css, keyframes } from "@emotion/react/macro";
 
-interface ModalDeleteConfirmationProps {
-	setModalDeleteShowStatus: React.Dispatch<React.SetStateAction<boolean>>;
+import { buttonRegular, buttonDanger } from "../../../object-styles/form-groups";
+
+interface Props {
+	onClose: () => void;
+	onDelete: () => void;
 }
 
-function ModalDeleteConfirmation({ setModalDeleteShowStatus }: ModalDeleteConfirmationProps) {
+function ModalDeleteConfirmation({ onClose, onDelete }: Props) {
+	function deleteContact() {
+		onDelete();
+	}
+
 	function closeModalDeleteConfirmation() {
-		setModalDeleteShowStatus(false);
+		const body = document.body;
+
+		body.style.overflow = "visible";
+		onClose();
 	}
 
 	return (
@@ -19,11 +29,14 @@ function ModalDeleteConfirmation({ setModalDeleteShowStatus }: ModalDeleteConfir
 				<div css={modalConfirmation.modalBody}>Once you delete this you are not alllowed to restore.</div>
 
 				<div css={modalConfirmation.buttonsWrapper}>
-					<button type="button" css={modalConfirmation.btnCancel} onClick={closeModalDeleteConfirmation}>
+					<button
+						type="button"
+						onClick={closeModalDeleteConfirmation}
+						css={[buttonRegular, modalConfirmation.btnCancel]}>
 						Cancel
 					</button>
 
-					<button type="button" css={modalConfirmation.btnDelete}>
+					<button type="button" onClick={deleteContact} css={[buttonDanger, modalConfirmation.btnDelete]}>
 						Delete
 					</button>
 				</div>
@@ -32,7 +45,7 @@ function ModalDeleteConfirmation({ setModalDeleteShowStatus }: ModalDeleteConfir
 	);
 }
 
-const modal = keyframes`
+const modalAnimation = keyframes`
 	from {
 		opacity: 0;
 	}
@@ -53,7 +66,7 @@ const modalConfirmation = {
 		position: "fixed",
 		alignItems: "center",
 		justifyContent: "center",
-		animation: `${modal} 100ms`,
+		animation: `${modalAnimation} 100ms`,
 		backgroundColor: "rgba(0, 0, 0, 0.5)"
 	}),
 
@@ -70,45 +83,24 @@ const modalConfirmation = {
 	}),
 
 	modalBody: css({
-		marginTop: "1rem",
 		fontSize: "1.3rem",
-		marginBottom: "1.4rem"
+		marginTop: "1.1rem",
+		marginBottom: "1.5rem"
 	}),
 
 	buttonsWrapper: css({
 		gap: "1.2rem",
 		display: "flex",
 		alignItems: "center",
-		justifyContent: "center",
-
-		button: {
-			width: "100%",
-			fontSize: "1.3rem",
-			borderStyle: "solid",
-			borderWidth: "0.1rem",
-			borderRadius: "0.4rem",
-			padding: "0.8rem 1.4rem"
-		}
+		justifyContent: "center"
 	}),
 
 	btnCancel: css({
-		borderColor: "#9ca3af",
-		backgroundColor: "#fff",
-		color: "var(--primary-text-color)"
+		width: "100%"
 	}),
 
 	btnDelete: css({
-		color: "#fff",
-		borderColor: "#ab091e",
-		backgroundColor: "#ab091e",
-
-		":hover": {
-			backgroundColor: "#910618"
-		},
-
-		":active": {
-			backgroundColor: "#7e0515"
-		}
+		width: "100%"
 	})
 };
 

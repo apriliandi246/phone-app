@@ -2,25 +2,33 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react/macro";
 import { Fragment, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 import SearchContact from "./components/SearchContact";
 import SkeletonsLoading from "../../components/SkeletonsLoading";
 
 function Page() {
-	const [searchContactQuery, setSearchContactQuery] = useState("");
-	const [isFetchingData, setFetchingStatus] = useState(false);
+	const [isFetchingData, setFetchingStatus] = useState<boolean>(false);
+	const [searchContactQuery, setSearchContactQuery] = useState<string>("");
 
 	useEffect(() => {
-		setFetchingStatus(false);
+		let timer: any;
+
+		if (searchContactQuery !== "") {
+			timer = setTimeout(() => {
+				console.log(searchContactQuery);
+				setFetchingStatus(false);
+			}, 1500);
+		}
+
+		return () => clearTimeout(timer);
 	}, [searchContactQuery]);
 
 	return (
-		<div>
+		<Fragment>
 			<SearchContact setFetchingStatus={setFetchingStatus} setSearchContactQuery={setSearchContactQuery} />
 
-			<SkeletonsLoading />
-		</div>
+			{isFetchingData === true && <SkeletonsLoading />}
+		</Fragment>
 	);
 }
 
