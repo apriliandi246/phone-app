@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { Link } from "react-router-dom";
 import { jsx, css } from "@emotion/react/macro";
-import { KeyboardEvent, ChangeEvent, useState } from "react";
+import { KeyboardEvent, useState, useRef, useEffect } from "react";
 
 interface Props {
 	setFetchingStatus: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,6 +12,13 @@ interface Props {
 function SearchContact({ setFetchingStatus, setSearchContactQuery }: Props) {
 	const [inputValue, setInputValue] = useState<string>("");
 	const isInputValueEmpty: boolean = inputValue.trimStart() === "";
+	const inputSearchElement = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (inputSearchElement.current) {
+			inputSearchElement.current.focus();
+		}
+	}, []);
 
 	function handleInputChange(value: string) {
 		setInputValue(value.trimStart());
@@ -61,6 +68,7 @@ function SearchContact({ setFetchingStatus, setSearchContactQuery }: Props) {
 					type="search"
 					value={inputValue}
 					autoComplete="off"
+					ref={inputSearchElement}
 					onKeyUp={handleInputKeyup}
 					placeholder="Search contact name"
 					css={searchContactSection.inputSearch}

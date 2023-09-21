@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { Link } from "react-router-dom";
 import { Fragment, useState } from "react";
-import { jsx, css, keyframes } from "@emotion/react/macro";
+import { jsx, css } from "@emotion/react/macro";
 
 import SpinnerLoading from "./components/SpinnerLoading";
 import ContactListItems from "./components/ContactListItems";
@@ -16,6 +16,7 @@ function Page() {
 
 	function deleteContact() {
 		console.log("Delete contact with ID: ", contactIDModalSelected);
+		setModalDeleteOpenStatus(false);
 	}
 
 	function openModalDeleteConfirmation() {
@@ -77,6 +78,7 @@ function Page() {
 
 					<ContactListItems
 						contacts={contacts}
+						isModalDeleteOpen={isModalDeleteOpen}
 						openModal={openModalDeleteConfirmation}
 						setContactIDModalSelected={setContactIDModalSelected}
 					/>
@@ -97,6 +99,7 @@ function Page() {
 
 					<ContactListItems
 						contacts={contacts}
+						isModalDeleteOpen={isModalDeleteOpen}
 						openModal={openModalDeleteConfirmation}
 						setContactIDModalSelected={setContactIDModalSelected}
 					/>

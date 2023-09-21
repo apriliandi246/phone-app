@@ -2,18 +2,31 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react/macro";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { buttonRegular } from "../../../emotion-object-styles/form-groups";
 
 interface Props {
 	contacts: number[];
 	openModal: () => void;
+	isModalDeleteOpen: boolean;
 	setContactIDModalSelected: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function ContactListItems({ contacts, openModal, setContactIDModalSelected }: Props) {
+function ContactListItems({ contacts, openModal, isModalDeleteOpen, setContactIDModalSelected }: Props) {
 	const [itemSelected, setItemSelected] = useState<number>(-1);
+
+	useEffect(() => {
+		const body = document.body;
+
+		if (isModalDeleteOpen === true) {
+			body.style.overflow = "hidden";
+		}
+
+		return () => {
+			body.style.overflow = "visible";
+		};
+	}, [isModalDeleteOpen]);
 
 	function toggle(index: number) {
 		if (index === itemSelected) {
@@ -24,9 +37,6 @@ function ContactListItems({ contacts, openModal, setContactIDModalSelected }: Pr
 	}
 
 	function showModalDeleteConfirmation(contactId: number) {
-		const body = document.body;
-		body.style.overflow = "hidden";
-
 		setContactIDModalSelected(contactId);
 		openModal();
 	}

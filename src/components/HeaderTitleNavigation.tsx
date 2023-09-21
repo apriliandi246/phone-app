@@ -3,11 +3,7 @@
 import { Link } from "react-router-dom";
 import { jsx, css } from "@emotion/react/macro";
 
-interface Props {
-	title: string;
-}
-
-function HeaderTitleNavigation({ title }: Props) {
+function HeaderTitleNavigation({ title }: { title: string }) {
 	return (
 		<header css={header.self}>
 			<Link to="/" css={header.back}>
@@ -32,9 +28,9 @@ const header = {
 	}),
 
 	back: css({
-		gridColumn: "span 1",
 		display: "flex",
 		alignItems: "center",
+		gridColumn: "span 1",
 		justifyContent: "flex-start"
 	}),
 

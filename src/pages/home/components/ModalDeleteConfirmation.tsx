@@ -15,9 +15,6 @@ function ModalDeleteConfirmation({ onClose, onDelete }: Props) {
 	}
 
 	function handleCancelClick() {
-		const body = document.body;
-
-		body.style.overflow = "visible";
 		onClose();
 	}
 
