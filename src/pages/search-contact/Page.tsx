@@ -8,6 +8,14 @@ function Page() {
 	const [searchContactQuery, setSearchContactQuery] = useState<string>("");
 
 	useEffect(() => {
+		document.title = "Phone App - Search Contact";
+
+		return () => {
+			document.title = "Phone App";
+		};
+	}, []);
+
+	useEffect(() => {
 		let timer: any;
 
 		if (searchContactQuery !== "") {

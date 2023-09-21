@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { jsx, css } from "@emotion/react/macro";
 
 import HeaderTitleNavigation from "../../components/HeaderTitleNavigation";
@@ -14,6 +14,14 @@ import {
 } from "../../emotion-object-styles/form-groups";
 
 function Page() {
+	useEffect(() => {
+		document.title = "Phone App - Edit Contact";
+
+		return () => {
+			document.title = "Phone App";
+		};
+	}, []);
+
 	return (
 		<Fragment>
 			<HeaderTitleNavigation title="Edit Contact" />
