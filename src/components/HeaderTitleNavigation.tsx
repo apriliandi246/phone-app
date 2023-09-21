@@ -27,6 +27,7 @@ function HeaderTitleNavigation({ title }: Props) {
 const header = {
 	self: css({
 		display: "grid",
+		alignItems: "center",
 		gridTemplateColumns: "repeat(12, 1fr)"
 	}),
 
