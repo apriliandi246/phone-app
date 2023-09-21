@@ -4,8 +4,8 @@ import SearchContact from "./components/SearchContact";
 import SkeletonsLoading from "../../components/SkeletonsLoading";
 
 function Page() {
-	const [isFetchingData, setFetchingStatus] = useState<boolean>(false);
-	const [searchContactQuery, setSearchContactQuery] = useState<string>("");
+	const [contactQuery, setContactQuery] = useState<string>("");
+	const [isSearching, setSearching] = useState<boolean>(false);
 
 	useEffect(() => {
 		document.title = "Phone App - Search Contact";
@@ -18,21 +18,20 @@ function Page() {
 	useEffect(() => {
 		let timer: any;
 
-		if (searchContactQuery !== "") {
+		if (isSearching === true && contactQuery !== "") {
 			timer = setTimeout(() => {
-				console.log(searchContactQuery);
-				setFetchingStatus(false);
+				console.log(contactQuery.trim());
+				setSearching(false);
 			}, 1500);
 		}
 
 		return () => clearTimeout(timer);
-	}, [searchContactQuery]);
+	}, [isSearching]);
 
 	return (
 		<Fragment>
-			<SearchContact setFetchingStatus={setFetchingStatus} setSearchContactQuery={setSearchContactQuery} />
-
-			{isFetchingData === true && <SkeletonsLoading />}
+			<SearchContact contactQuery={contactQuery} onSearching={setSearching} onSetQuery={setContactQuery} />
+			{isSearching === true && <SkeletonsLoading />}
 		</Fragment>
 	);
 }

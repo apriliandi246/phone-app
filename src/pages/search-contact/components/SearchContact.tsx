@@ -5,13 +5,14 @@ import { jsx, css } from "@emotion/react/macro";
 import { KeyboardEvent, useState, useRef, useEffect } from "react";
 
 interface Props {
-	setFetchingStatus: React.Dispatch<React.SetStateAction<boolean>>;
-	setSearchContactQuery: React.Dispatch<React.SetStateAction<string>>;
+	contactQuery: string;
+	onSetQuery: React.Dispatch<React.SetStateAction<string>>;
+	onSearching: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function SearchContact({ setFetchingStatus, setSearchContactQuery }: Props) {
-	const [inputValue, setInputValue] = useState<string>("");
-	const isInputValueEmpty: boolean = inputValue.trimStart() === "";
+function SearchContact({ contactQuery, onSetQuery, onSearching }: Props) {
+	const [isPressedEnter, setPressedEnter] = useState<boolean>(false);
+	const [isClearingInput, setClearingInput] = useState<boolean>(false);
 	const inputSearchElement = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
@@ -20,19 +21,34 @@ function SearchContact({ setFetchingStatus, setSearchContactQuery }: Props) {
 		}
 	}, []);
 
+	useEffect(() => {
+		if (isClearingInput === true && inputSearchElement.current) {
+			inputSearchElement.current.focus();
+			setClearingInput(false);
+		}
+	}, [isClearingInput]);
+
+	useEffect(() => {
+		if (isPressedEnter === true && inputSearchElement.current) {
+			inputSearchElement.current.blur();
+			setPressedEnter(false);
+		}
+	}, [isPressedEnter]);
+
 	function handleInputChange(value: string) {
-		setInputValue(value.trimStart());
+		onSetQuery(value.trimStart());
 	}
 
 	function handleInputKeyup(event: KeyboardEvent) {
-		if (event.key === "Enter" && inputValue !== "") {
-			setFetchingStatus(true);
-			setSearchContactQuery(inputValue);
+		if (event.key === "Enter" && contactQuery !== "") {
+			setPressedEnter(true);
+			onSearching(true);
 		}
 	}
 
-	function clearInputValue() {
-		setInputValue("");
+	function handleClearInput() {
+		onSetQuery("");
+		setClearingInput(true);
 	}
 
 	return (
@@ -66,8 +82,8 @@ function SearchContact({ setFetchingStatus, setSearchContactQuery }: Props) {
 
 				<input
 					type="search"
-					value={inputValue}
 					autoComplete="off"
+					value={contactQuery}
 					ref={inputSearchElement}
 					onKeyUp={handleInputKeyup}
 					placeholder="Search contact name"
@@ -75,8 +91,8 @@ function SearchContact({ setFetchingStatus, setSearchContactQuery }: Props) {
 					onChange={(event) => handleInputChange(event.target.value)}
 				/>
 
-				{isInputValueEmpty === false && (
-					<button type="button" css={searchContactSection.buttonClearSearch} onClick={clearInputValue}>
+				{contactQuery.trim() !== "" && (
+					<button type="button" css={searchContactSection.buttonClearSearch} onClick={handleClearInput}>
 						<svg width="16" height="16" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 							<path
 								d="M19.071 4.929c3.905 3.905 3.905 10.237 0 14.142-3.905 3.905-10.237 3.905-14.142 0-3.905-3.905-3.905-10.237 0-14.142 3.905-3.906 10.237-3.906 14.142 0Zm-7.031 5.147L10.175 8.21c-.35-.35-.717-.53-1.1-.54a1.33 1.33 0 0 0-1.008.418c-.288.287-.424.62-.41 1 .02.374.223.755.612 1.144l1.807 1.807-1.865 1.865c-.35.35-.53.717-.54 1.1-.01.384.13.72.418 1.008.288.287.62.424 1 .41.374-.02.755-.223 1.144-.612l1.807-1.807 1.786 1.786c.383.383.767.59 1.15.618a1.27 1.27 0 0 0 1.015-.396 1.31 1.31 0 0 0 .41-1.014c-.014-.388-.218-.78-.611-1.173l-1.786-1.785 1.786-1.786c.383-.383.59-.767.619-1.15a1.27 1.27 0 0 0-.396-1.015 1.315 1.315 0 0 0-1.015-.41c-.388.014-.78.218-1.172.611l-1.786 1.786Z"
