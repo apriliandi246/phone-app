@@ -1,6 +1,3 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-import { jsx, css } from "@emotion/react/macro";
 import { Fragment, useState, useEffect } from "react";
 
 import SearchContact from "./components/SearchContact";

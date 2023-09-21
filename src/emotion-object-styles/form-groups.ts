@@ -19,15 +19,16 @@ export const formWrapper = css({
 
 export const inputBase = css({
 	width: "100%",
+	fontSize: "1.4rem",
 	borderRadius: "0.4rem",
 	backgroundColor: "#fff",
 	backgroundSize: "1.6rem",
+	color: "var(--dark-gray)",
 	backgroundRepeat: "no-repeat",
 	fontFamily: "var(--font-family)",
-	color: "var(--primary-text-color)",
 	padding: "0.8rem 1.4rem 0.8rem 4.4rem",
 	backgroundPosition: "left 1.6rem center",
-	border: "0.1rem solid var(--border-color)"
+	border: "0.1rem solid var(--slate-gray)"
 });
 
 export const inputUserIcon = css({
@@ -42,8 +43,8 @@ export const buttonRegular = css([
 	buttonBase,
 	{
 		backgroundColor: "#fff",
-		color: "var(--primary-text-color)",
-		borderColor: "var(--border-color)",
+		color: "var(--dark-gray)",
+		borderColor: "var(--slate-gray)",
 
 		":hover": {
 			backgroundColor: "#e3e3e3"

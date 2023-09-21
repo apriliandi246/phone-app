@@ -3,10 +3,10 @@
 import { jsx, css, keyframes } from "@emotion/react/macro";
 
 function SpinnerLoading() {
-	return <div css={spinnerLoading.self}></div>;
+	return <div css={spinner.self}></div>;
 }
 
-const spinner = keyframes`
+const spinnerAnimation = keyframes`
 	0% {
 		transform: rotate(0deg);
 	}
@@ -16,17 +16,17 @@ const spinner = keyframes`
 	}
 `;
 
-const spinnerLoading = {
+const spinner = {
 	self: css({
 		width: "4rem",
 		height: "4rem",
 		borderRadius: "100%",
 		marginInline: "auto",
 		border: "0.5rem solid transparent",
-		borderTopColor: "var(--border-color)",
-		borderRightColor: "var(--border-color)",
-		borderBottomColor: "var(--border-color)",
-		animation: `${spinner} 800ms linear infinite`
+		borderTopColor: "#6a6a6a",
+		borderRightColor: "#6a6a6a",
+		borderBottomColor: "#6a6a6a",
+		animation: `${spinnerAnimation} 800ms linear infinite`
 	})
 };
 
