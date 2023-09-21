@@ -1,15 +1,26 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx, css, keyframes } from "@emotion/react/macro";
+import { useEffect } from "react";
+import { jsx, css } from "@emotion/react/macro";
 
 import { buttonRegular, buttonDanger } from "../../../emotion-object-styles/form-groups";
 
 interface Props {
+	isDeleting: boolean;
 	onClose: () => void;
 	onDelete: () => void;
 }
 
-function ModalDeleteConfirmation({ onClose, onDelete }: Props) {
+function ModalDeleteConfirmation({ isDeleting, onClose, onDelete }: Props) {
+	useEffect(() => {
+		const body = document.body;
+		body.style.overflow = "hidden";
+
+		return () => {
+			body.style.overflow = "visible";
+		};
+	}, []);
+
 	function handleDeleteClick() {
 		onDelete();
 	}
@@ -25,28 +36,26 @@ function ModalDeleteConfirmation({ onClose, onDelete }: Props) {
 				<div css={modal.body}>Once you delete this you are not alllowed to restore.</div>
 
 				<div css={modal.menuWrapper}>
-					<button type="button" onClick={handleCancelClick} css={buttonRegular}>
+					<button
+						type="button"
+						css={buttonRegular}
+						onClick={handleCancelClick}
+						disabled={isDeleting === true ? true : false}>
 						Cancel
 					</button>
 
-					<button type="button" onClick={handleDeleteClick} css={buttonDanger}>
-						Delete
+					<button
+						type="button"
+						css={buttonDanger}
+						onClick={handleDeleteClick}
+						disabled={isDeleting === true ? true : false}>
+						{isDeleting === true ? "Loading" : "Delete"}
 					</button>
 				</div>
 			</div>
 		</div>
 	);
 }
-
-const modalAnimation = keyframes`
-	from {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 1;
-	}
-`;
 
 const modal = {
 	overlay: css({
@@ -59,7 +68,6 @@ const modal = {
 		position: "fixed",
 		alignItems: "center",
 		justifyContent: "center",
-		animation: `${modalAnimation} 100ms`,
 		backgroundColor: "rgba(0, 0, 0, 0.5)"
 	}),
 
@@ -72,13 +80,14 @@ const modal = {
 	}),
 
 	title: css({
-		fontSize: "1.6rem"
+		fontWeight: "600",
+		fontSize: "2.2rem"
 	}),
 
 	body: css({
 		fontSize: "1.3rem",
 		marginTop: "1.1rem",
-		marginBottom: "1.5rem"
+		marginBottom: "1.7rem"
 	}),
 
 	menuWrapper: css({

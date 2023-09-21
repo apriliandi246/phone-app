@@ -1,36 +1,70 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { Link } from "react-router-dom";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { jsx, css } from "@emotion/react/macro";
 
 import SpinnerLoading from "./components/SpinnerLoading";
 import ContactListItems from "./components/ContactListItems";
 import LoadMoreButton from "./components/LoadMoreLoadMoreButton";
 import ModalDeleteConfirmation from "./components/ModalDeleteConfirmation";
+import ModalNotify from "../../components/ModalNotify";
 
 function Page() {
+	// example data
 	const [contacts, setContacts] = useState<number[]>([1, 2, 3, 4, 5]);
-	const [isModalDeleteOpen, setModalDeleteOpenStatus] = useState<boolean>(false);
-	const [contactIDModalSelected, setContactIDModalSelected] = useState<number>(-1);
+
+	const [isContactDeleted, setContactDeleted] = useState<boolean>(false);
+	const [isContactDeleting, setContactDeleting] = useState<boolean>(false);
+	const [modalContactSelected, setModalContactSelected] = useState<{ isOpen: boolean; contactID: number }>({
+		isOpen: false,
+		contactID: -1
+	});
+
+	useEffect(() => {
+		let timer: any;
+
+		if (modalContactSelected.contactID !== -1 && isContactDeleting === true) {
+			timer = setTimeout(() => {
+				console.log("Delete contact with ID: ", modalContactSelected.contactID);
+
+				setModalContactSelected({ isOpen: false, contactID: -1 });
+				setContactDeleting(false);
+				setContactDeleted(true);
+			}, 2500);
+		}
+
+		return () => {
+			clearTimeout(timer);
+		};
+	}, [isContactDeleting]);
 
 	function deleteContact() {
-		console.log("Delete contact with ID: ", contactIDModalSelected);
-		setModalDeleteOpenStatus(false);
+		setContactDeleting(true);
 	}
 
-	function openModalDeleteConfirmation() {
-		setModalDeleteOpenStatus(true);
+	function openModalDeleteConfirmation(selectedContactID: number) {
+		setModalContactSelected({ isOpen: true, contactID: selectedContactID });
 	}
 
 	function closeModalDeleteConfirmation() {
-		setModalDeleteOpenStatus(false);
+		setModalContactSelected({ ...modalContactSelected, isOpen: false });
+	}
+
+	function closeModalDeleteNotify() {
+		setContactDeleted(false);
 	}
 
 	return (
 		<Fragment>
-			{isModalDeleteOpen === true && (
-				<ModalDeleteConfirmation onDelete={deleteContact} onClose={closeModalDeleteConfirmation} />
+			{isContactDeleted === true && <ModalNotify onClose={closeModalDeleteNotify} />}
+
+			{modalContactSelected.isOpen === true && (
+				<ModalDeleteConfirmation
+					isDeleting={isContactDeleting}
+					onDelete={deleteContact}
+					onClose={closeModalDeleteConfirmation}
+				/>
 			)}
 
 			<div css={mainContainer.self}>
@@ -76,12 +110,7 @@ function Page() {
 						<div css={contactCategory.title}>Favorites</div>
 					</div>
 
-					<ContactListItems
-						contacts={contacts}
-						isModalDeleteOpen={isModalDeleteOpen}
-						openModal={openModalDeleteConfirmation}
-						setContactIDModalSelected={setContactIDModalSelected}
-					/>
+					<ContactListItems contacts={contacts} openModal={openModalDeleteConfirmation} />
 				</div>
 
 				{/* All contact */}
@@ -97,16 +126,10 @@ function Page() {
 						<div css={contactCategory.title}>All</div>
 					</div>
 
-					<ContactListItems
-						contacts={contacts}
-						isModalDeleteOpen={isModalDeleteOpen}
-						openModal={openModalDeleteConfirmation}
-						setContactIDModalSelected={setContactIDModalSelected}
-					/>
+					<ContactListItems contacts={contacts} openModal={openModalDeleteConfirmation} />
 				</div>
 
 				<LoadMoreButton />
-				<br />
 				<SpinnerLoading />
 			</div>
 		</Fragment>

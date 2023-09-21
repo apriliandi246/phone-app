@@ -8,27 +8,13 @@ import { buttonRegular } from "../../../emotion-object-styles/form-groups";
 
 interface Props {
 	contacts: number[];
-	openModal: () => void;
-	isModalDeleteOpen: boolean;
-	setContactIDModalSelected: React.Dispatch<React.SetStateAction<number>>;
+	openModal: (selectedContactID: number) => void;
 }
 
-function ContactListItems({ contacts, openModal, isModalDeleteOpen, setContactIDModalSelected }: Props) {
+function ContactListItems({ contacts, openModal }: Props) {
 	const [itemSelected, setItemSelected] = useState<number>(-1);
 
-	useEffect(() => {
-		const body = document.body;
-
-		if (isModalDeleteOpen === true) {
-			body.style.overflow = "hidden";
-		}
-
-		return () => {
-			body.style.overflow = "visible";
-		};
-	}, [isModalDeleteOpen]);
-
-	function toggle(index: number) {
+	function toggleMenu(index: number) {
 		if (index === itemSelected) {
 			setItemSelected(-1);
 		} else {
@@ -37,8 +23,7 @@ function ContactListItems({ contacts, openModal, isModalDeleteOpen, setContactID
 	}
 
 	function showModalDeleteConfirmation(contactId: number) {
-		setContactIDModalSelected(contactId);
-		openModal();
+		openModal(contactId);
 	}
 
 	return (
@@ -47,7 +32,7 @@ function ContactListItems({ contacts, openModal, isModalDeleteOpen, setContactID
 				<div key={contact} css={contactItem.self}>
 					<button
 						type="button"
-						onClick={() => toggle(index)}
+						onClick={() => toggleMenu(index)}
 						css={[buttonRegular, contactItem.button]}
 						style={{
 							borderBottomLeftRadius: itemSelected === index ? "0" : "inherit",
