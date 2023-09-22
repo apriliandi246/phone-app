@@ -1,8 +1,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx, css } from "@emotion/react/macro";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { jsx, css } from "@emotion/react/macro";
 
 import { buttonRegular } from "../../../emotion-object-styles/form-groups";
 

@@ -1,19 +1,19 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { Link } from "react-router-dom";
-import { Fragment, useEffect, useState } from "react";
 import { jsx, css } from "@emotion/react/macro";
+import { Fragment, useEffect, useState } from "react";
 
-import SpinnerLoading from "./components/SpinnerLoading";
-import ContactListItems from "./components/ContactListItems";
-import LoadMoreButton from "./components/LoadMoreLoadMoreButton";
-import ModalDeleteConfirmation from "./components/ModalDeleteConfirmation";
+import Tab from "./components/Tab";
 import ModalNotify from "../../components/ModalNotify";
+import ContactListItems from "./components/ContactListItems";
+import ModalDeleteConfirmation from "./components/ModalDeleteConfirmation";
 
 function Page() {
 	// example data
 	const [contacts, setContacts] = useState<number[]>([1, 2, 3, 4, 5]);
 
+	const [contactTab, setContactTab] = useState("all");
 	const [isContactDeleted, setContactDeleted] = useState<boolean>(false);
 	const [isContactDeleting, setContactDeleting] = useState<boolean>(false);
 	const [modalContactSelected, setModalContactSelected] = useState<{ isOpen: boolean; contactID: number }>({
@@ -97,40 +97,43 @@ function Page() {
 					</Link>
 				</div>
 
+				<Tab activeTab={contactTab} onChangeTab={setContactTab} />
+
 				{/* Favorites contact */}
-				<div css={contactCategory.self}>
-					<div css={contactCategory.header}>
-						<svg width="16" height="16" viewBox="0 0 69 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path
-								d="m34.228 54.79 16.6 10.04c3.04 1.84 6.76-.88 5.96-4.32l-4.4-18.88 14.68-12.72c2.68-2.32 1.24-6.72-2.28-7l-19.32-1.64-7.56-17.84c-1.36-3.24-6-3.24-7.36 0l-7.56 17.8-19.32 1.64c-3.52.28-4.96 4.68-2.28 7l14.68 12.72-4.4 18.88c-.8 3.44 2.92 6.16 5.96 4.32l16.6-10Z"
-								fill="var(--dim-gray)"
-							/>
-						</svg>
+				{contactTab === "favorite" && (
+					<div css={contactCategory.self}>
+						<div css={contactCategory.header}>
+							<svg width="16" height="16" viewBox="0 0 69 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="m34.228 54.79 16.6 10.04c3.04 1.84 6.76-.88 5.96-4.32l-4.4-18.88 14.68-12.72c2.68-2.32 1.24-6.72-2.28-7l-19.32-1.64-7.56-17.84c-1.36-3.24-6-3.24-7.36 0l-7.56 17.8-19.32 1.64c-3.52.28-4.96 4.68-2.28 7l14.68 12.72-4.4 18.88c-.8 3.44 2.92 6.16 5.96 4.32l16.6-10Z"
+									fill="var(--dim-gray)"
+								/>
+							</svg>
 
-						<div css={contactCategory.title}>Favorites</div>
+							<div css={contactCategory.title}>Favorites</div>
+						</div>
+
+						<ContactListItems contacts={contacts} openModal={openModalDeleteConfirmation} />
 					</div>
-
-					<ContactListItems contacts={contacts} openModal={openModalDeleteConfirmation} />
-				</div>
+				)}
 
 				{/* All contact */}
-				<div css={contactCategory.self}>
-					<div css={contactCategory.header}>
-						<svg width="16" height="16" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path
-								d="M0 8v56c0 4.4 3.56 8 8 8h56c4.4 0 8-3.6 8-8V8c0-4.4-3.6-8-8-8H8C3.56 0 0 3.6 0 8Zm48 16c0 6.64-5.36 12-12 12s-12-5.36-12-12 5.36-12 12-12 12 5.36 12 12ZM12 56c0-8 16-12.4 24-12.4S60 48 60 56v4H12v-4Z"
-								fill="var(--dim-gray)"
-							/>
-						</svg>
+				{contactTab === "all" && (
+					<div css={contactCategory.self}>
+						<div css={contactCategory.header}>
+							<svg width="16" height="16" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="M0 8v56c0 4.4 3.56 8 8 8h56c4.4 0 8-3.6 8-8V8c0-4.4-3.6-8-8-8H8C3.56 0 0 3.6 0 8Zm48 16c0 6.64-5.36 12-12 12s-12-5.36-12-12 5.36-12 12-12 12 5.36 12 12ZM12 56c0-8 16-12.4 24-12.4S60 48 60 56v4H12v-4Z"
+									fill="var(--dim-gray)"
+								/>
+							</svg>
 
-						<div css={contactCategory.title}>All</div>
+							<div css={contactCategory.title}>All</div>
+						</div>
+
+						<ContactListItems contacts={contacts} openModal={openModalDeleteConfirmation} />
 					</div>
-
-					<ContactListItems contacts={contacts} openModal={openModalDeleteConfirmation} />
-				</div>
-
-				<LoadMoreButton />
-				<SpinnerLoading />
+				)}
 			</div>
 		</Fragment>
 	);
