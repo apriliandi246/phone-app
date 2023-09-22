@@ -13,6 +13,7 @@ function ModalNotify({ onClose }: { onClose: () => void }) {
 		<div css={modal.overlay}>
 			<div css={modal.self}>
 				<div css={modal.title}>Contact Deleted</div>
+				<div css={modal.body}>Contact successfully deleted</div>
 
 				<button onClick={handleClick} css={[buttonRegular, modal.btnClose]}>
 					Close
@@ -37,22 +38,26 @@ const modal = {
 	}),
 
 	self: css({
-		width: "300px",
+		width: "315px",
 		margin: "auto",
 		padding: "2.2rem",
-		textAlign: "center",
 		borderRadius: "0.4rem",
 		backgroundColor: "#fff"
 	}),
 
 	title: css({
 		fontWeight: "600",
-		fontSize: "2.2rem",
-		marginBottom: "2.3rem"
+		fontSize: "2.2rem"
+	}),
+
+	body: css({
+		fontSize: "1.3rem",
+		marginTop: "1.1rem",
+		marginBottom: "1.7rem"
 	}),
 
 	btnClose: css({
-		width: "fit-content"
+		width: "100%"
 	})
 };
 
