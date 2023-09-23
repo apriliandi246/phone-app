@@ -7,8 +7,8 @@ import { jsx, css } from "@emotion/react/macro";
 import { buttonRegular } from "../../../emotion-object-styles/form-groups";
 
 interface Props {
-	contacts: number[];
 	openModal: (selectedContactID: number) => void;
+	contacts: { id: number; first_name: string; last_name: string; phones: [{ number: string }] }[];
 }
 
 function ContactListItems({ contacts, openModal }: Props) {
@@ -26,22 +26,28 @@ function ContactListItems({ contacts, openModal }: Props) {
 		openModal(contactId);
 	}
 
+	function handleToggleFavoriteContact(contactId: number) {
+		console.log(contactId);
+	}
+
 	return (
 		<div>
-			{contacts.map((contact, index) => (
-				<div key={contact} css={contactItem.self}>
+			{contacts.map((contact) => (
+				<div key={contact.id} css={contactItem.self}>
 					<button
 						type="button"
-						onClick={() => toggleMenu(index)}
+						onClick={() => toggleMenu(contact.id)}
 						css={[buttonRegular, contactItem.button]}
 						style={{
-							borderBottomLeftRadius: itemSelected === index ? "0" : "inherit",
-							borderBottomRightRadius: itemSelected === index ? "0" : "inherit"
+							borderBottomLeftRadius: itemSelected === contact.id ? "0" : "inherit",
+							borderBottomRightRadius: itemSelected === contact.id ? "0" : "inherit"
 						}}>
-						<div css={contactItem.avatar}>f</div>
+						<div css={contactItem.avatar}>{contact.first_name[0]}</div>
 
 						<div css={contactItem.details}>
-							<div css={contactItem.name}>Farhan Apriliandi</div>
+							<div css={contactItem.name}>
+								{contact.first_name} {contact.last_name}
+							</div>
 						</div>
 
 						<svg width="13" height="13" viewBox="0 0 46 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,15 +58,24 @@ function ContactListItems({ contacts, openModal }: Props) {
 						</svg>
 					</button>
 
-					{itemSelected === index && (
+					{itemSelected === contact.id && (
 						<div css={contactItem.content}>
 							<div css={contactItem.phoneNumbers}>
-								<div css={contactItem.phone}>+6281355531239</div>
-								<div css={contactItem.phone}>+6281355531239</div>
+								{contact.phones.map(
+									(phone, index) =>
+										phone.number.trim() !== "" && (
+											<div key={index} css={contactItem.phone}>
+												{phone.number}
+											</div>
+										)
+								)}
 							</div>
 
 							<div css={contactItem.menus}>
-								<button css={contactItem.buttonMenu}>
+								<button
+									type="button"
+									css={contactItem.buttonMenu}
+									onClick={() => handleToggleFavoriteContact(contact.id)}>
 									<svg width="18" height="18" viewBox="0 0 70 66" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path
 											d="m65.6 22.16-19.36-1.68-7.56-17.8c-1.36-3.24-6-3.24-7.36 0l-7.56 17.84-19.32 1.64c-3.52.28-4.96 4.68-2.28 7l14.68 12.72-4.4 18.88c-.8 3.44 2.92 6.16 5.96 4.32l16.6-10 16.6 10.04c3.04 1.84 6.76-.88 5.96-4.32l-4.4-18.92 14.68-12.72c2.68-2.32 1.28-6.72-2.24-7ZM35 47.6l-15.04 9.08 4-17.12-13.28-11.52 17.52-1.52L35 10.4l6.84 16.16 17.52 1.52L46.08 39.6l4 17.12L35 47.6Z"
@@ -71,7 +86,7 @@ function ContactListItems({ contacts, openModal }: Props) {
 									<span>Favorite</span>
 								</button>
 
-								<Link to={`/edit-contact/${contact}`} css={contactItem.buttonMenu}>
+								<Link to={`/edit-contact/${contact.id}`} css={contactItem.buttonMenu}>
 									<svg width="16" height="16" viewBox="0 0 73 73" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path
 											d="M0 58.84V71c0 1.12.88 2 2 2h12.16c.52 0 1.04-.2 1.4-.6l43.68-43.64-15-15L.6 57.4c-.4.4-.6.88-.6 1.44Zm70.84-41.68a3.983 3.983 0 0 0 0-5.64l-9.36-9.36a3.983 3.983 0 0 0-5.64 0l-7.32 7.32 15 15 7.32-7.32Z"
@@ -82,7 +97,10 @@ function ContactListItems({ contacts, openModal }: Props) {
 									<span>Edit</span>
 								</Link>
 
-								<button css={contactItem.buttonMenu} onClick={() => showModalDeleteConfirmation(contact)}>
+								<button
+									type="button"
+									css={contactItem.buttonMenu}
+									onClick={() => showModalDeleteConfirmation(contact.id)}>
 									<svg width="16" height="14" viewBox="0 0 56 72" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path
 											d="M4 64c0 4.4 3.6 8 8 8h32c4.4 0 8-3.6 8-8V24c0-4.4-3.6-8-8-8H12c-4.4 0-8 3.6-8 8v40ZM52 4H42l-2.84-2.84A4.035 4.035 0 0 0 36.36 0H19.64c-1.04 0-2.08.44-2.8 1.16L14 4H4C1.8 4 0 5.8 0 8s1.8 4 4 4h48c2.2 0 4-1.8 4-4s-1.8-4-4-4Z"

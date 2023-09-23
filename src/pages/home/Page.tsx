@@ -1,34 +1,61 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { Link } from "react-router-dom";
+import { useLazyQuery } from "@apollo/client";
 import { jsx, css } from "@emotion/react/macro";
 import { Fragment, useEffect, useState } from "react";
 
 import Tab from "./components/Tab";
+import Menus from "./components/Menus";
+import Header from "./components/Header";
 import ModalNotify from "../../components/ModalNotify";
-import ContactListItems from "./components/ContactListItems";
+import CategoryContact from "./components/CategoryContact";
+import SkeletonsLoading from "../../components/SkeletonsLoading";
 import ModalDeleteConfirmation from "./components/ModalDeleteConfirmation";
 
-function Page() {
-	// example data
-	const [contacts, setContacts] = useState<number[]>([1, 2, 3, 4, 5]);
+import { ContactType } from "./types/contactList";
+import { GET_CONTACT_LIST } from "./grapql-queries/queries";
 
+function Page() {
+	const [loadContactList, { loading, data, error }] = useLazyQuery(GET_CONTACT_LIST);
 	const [contactTab, setContactTab] = useState("all");
+	const [contacts, setContacts] = useState<ContactType>([]);
 	const [isContactDeleted, setContactDeleted] = useState<boolean>(false);
 	const [isContactDeleting, setContactDeleting] = useState<boolean>(false);
-	const [modalContactSelected, setModalContactSelected] = useState<{ isOpen: boolean; contactID: number }>({
+	const [favoriteContacts, setFavoriteContacts] = useState<ContactType>([]);
+	const [modalContactSelected, setModalContactSelected] = useState<{ isOpen: boolean; contactId: number }>({
 		isOpen: false,
-		contactID: -1
+		contactId: -1
 	});
+
+	useEffect(() => {
+		const contacts = localStorage.getItem("contacts");
+
+		if (contacts === null) {
+			loadContactList();
+		} else {
+			const contactList = JSON.parse(contacts);
+			setContacts(contactList);
+		}
+	}, []);
+
+	useEffect(() => {
+		if (loading === false && data !== undefined) {
+			const contacts = JSON.stringify(data.contact);
+
+			setContacts(data.contact);
+			localStorage.setItem("contacts", contacts);
+		}
+	}, [loading]);
 
 	useEffect(() => {
 		let timer: any;
 
-		if (modalContactSelected.contactID !== -1 && isContactDeleting === true) {
+		if (modalContactSelected.contactId !== -1 && isContactDeleting === true) {
 			timer = setTimeout(() => {
-				console.log("Delete contact with ID: ", modalContactSelected.contactID);
+				console.log("Delete contact with ID: ", modalContactSelected.contactId);
 
-				setModalContactSelected({ isOpen: false, contactID: -1 });
+				setModalContactSelected({ isOpen: false, contactId: -1 });
 				setContactDeleting(false);
 				setContactDeleted(true);
 			}, 2500);
@@ -43,14 +70,6 @@ function Page() {
 		setContactDeleting(true);
 	}
 
-	function openModalDeleteConfirmation(selectedContactID: number) {
-		setModalContactSelected({ isOpen: true, contactID: selectedContactID });
-	}
-
-	function closeModalDeleteConfirmation() {
-		setModalContactSelected({ ...modalContactSelected, isOpen: false });
-	}
-
 	function closeModalDeleteNotify() {
 		setContactDeleted(false);
 	}
@@ -58,53 +77,44 @@ function Page() {
 	return (
 		<Fragment>
 			<div css={mainContainer.self}>
-				<header css={header.self}>
-					<h1 css={header.title}>Contact List</h1>
-					<div css={header.desc}>24 contacts with phone numbers</div>
-				</header>
+				<Header totalContacts={contacts.length} />
 
-				<div css={menus.self}>
-					<Link to="/search-contact" css={menus.menuItem}>
-						<svg width="19" height="19" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path
-								d="M51 45h-3.16l-1.12-1.08c4.8-5.6 7.28-13.24 5.92-21.36-1.88-11.12-11.16-20-22.36-21.36C13.36-.88-.88 13.36 1.2 30.28c1.36 11.2 10.24 20.48 21.36 22.36 8.12 1.36 15.76-1.12 21.36-5.92L45 47.84V51l17 17a4.225 4.225 0 0 0 5.96 0 4.225 4.225 0 0 0 0-5.96L51 45Zm-24 0c-9.96 0-18-8.04-18-18S17.04 9 27 9s18 8.04 18 18-8.04 18-18 18Z"
-								fill="var(--dim-gray)"
-							/>
-						</svg>
-
-						<span>Search</span>
-					</Link>
-
-					<Link to="/new-contact" css={menus.menuItem}>
-						<svg width="19" height="19" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path
-								d="M52 32H32v20c0 2.2-1.8 4-4 4s-4-1.8-4-4V32H4c-2.2 0-4-1.8-4-4s1.8-4 4-4h20V4c0-2.2 1.8-4 4-4s4 1.8 4 4v20h20c2.2 0 4 1.8 4 4s-1.8 4-4 4Z"
-								fill="var(--dim-gray)"
-							/>
-						</svg>
-
-						<span>Add</span>
-					</Link>
-				</div>
+				<Menus />
 
 				<Tab activeTab={contactTab} onChangeTab={setContactTab} />
 
-				{/* Favorites contact */}
-				{contactTab === "favorite" && <ContactListItems contacts={contacts} openModal={openModalDeleteConfirmation} />}
+				{loading === true && <SkeletonsLoading />}
 
-				{/* All contact */}
-				{contactTab === "all" && <ContactListItems contacts={contacts} openModal={openModalDeleteConfirmation} />}
+				{contactTab === "all" && (
+					<CategoryContact
+						categoryType="all"
+						contacts={contacts}
+						onSetAllContacts={setContacts}
+						onSetFavoriteContacts={setFavoriteContacts}
+						onOpenModalDeleteConfirmation={setModalContactSelected}
+					/>
+				)}
+
+				{contactTab === "favorite" && (
+					<CategoryContact
+						categoryType="favorite"
+						contacts={favoriteContacts}
+						onSetAllContacts={setContacts}
+						onSetFavoriteContacts={setFavoriteContacts}
+						onOpenModalDeleteConfirmation={setModalContactSelected}
+					/>
+				)}
 			</div>
-
-			{isContactDeleted === true && <ModalNotify onClose={closeModalDeleteNotify} />}
 
 			{modalContactSelected.isOpen === true && (
 				<ModalDeleteConfirmation
-					isDeleting={isContactDeleting}
 					onDelete={deleteContact}
-					onClose={closeModalDeleteConfirmation}
+					isDeleting={isContactDeleting}
+					onClose={setModalContactSelected}
 				/>
 			)}
+
+			{isContactDeleted === true && <ModalNotify onClose={closeModalDeleteNotify} />}
 		</Fragment>
 	);
 }
@@ -113,24 +123,6 @@ const mainContainer = {
 	self: css({
 		width: "100%"
 	})
-};
-
-const header = {
-	self: css({
-		marginTop: "2rem",
-		textAlign: "center",
-		color: "var(--dark-gray)"
-	}),
-
-	title: {
-		fontWeight: "600",
-		fontSize: "3.2rem"
-	},
-
-	desc: {
-		fontSize: "1.1rem",
-		color: "var(--dim-gray)"
-	}
 };
 
 const menus = {

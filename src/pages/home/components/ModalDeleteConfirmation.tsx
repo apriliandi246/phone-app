@@ -7,8 +7,8 @@ import { buttonRegular, buttonDanger } from "../../../emotion-object-styles/form
 
 interface Props {
 	isDeleting: boolean;
-	onClose: () => void;
 	onDelete: () => void;
+	onClose: React.Dispatch<React.SetStateAction<{ isOpen: boolean; contactId: number }>>;
 }
 
 function ModalDeleteConfirmation({ isDeleting, onClose, onDelete }: Props) {
@@ -26,7 +26,10 @@ function ModalDeleteConfirmation({ isDeleting, onClose, onDelete }: Props) {
 	}
 
 	function handleCancelClick() {
-		onClose();
+		onClose((prevState) => ({
+			...prevState,
+			isOpen: false
+		}));
 	}
 
 	return (
