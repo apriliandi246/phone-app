@@ -8,7 +8,11 @@ import HeaderTitleNavigation from "../../components/HeaderTitleNavigation";
 
 import { formWrapper, inputBase, buttonRegular, inputUserIcon } from "../../emotion-object-styles/form-groups";
 
+type FormStatusType = "empty" | "filled" | "submitting" | "success";
+
 function Page() {
+	const [error, setError] = useState(null);
+	const [status, setStatus] = useState<FormStatusType>("empty");
 	const [firstPhoneNumber, setFirstPhonenumber] = useState<string>("");
 	const [otherNumbers, setOtherNumbers] = useState<{ phone: string }[] | []>([]);
 	const [contactName, setContactName] = useState<{ firstName: string; lastName: string }>({
@@ -24,7 +28,15 @@ function Page() {
 		};
 	}, []);
 
-	console.log(contactName);
+	useEffect(() => {
+		const hasEmptyValues = firstPhoneNumber === "" || contactName.firstName === "" || contactName.lastName === "";
+
+		if (hasEmptyValues === false) {
+			setStatus("filled");
+		} else {
+			setStatus("empty");
+		}
+	}, [firstPhoneNumber, contactName]);
 
 	return (
 		<Fragment>
@@ -56,7 +68,7 @@ function Page() {
 					onSetFirstPhoneNumber={setFirstPhonenumber}
 				/>
 
-				<button type="submit" css={[buttonRegular, btnSubmit]}>
+				<button type="submit" disabled={status !== "filled"} css={[buttonRegular, btnSubmit]}>
 					Save
 				</button>
 			</form>
