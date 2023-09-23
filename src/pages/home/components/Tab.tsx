@@ -57,7 +57,7 @@ const tab = {
 		width: "50%",
 		bottom: "-0.1rem",
 		position: "absolute",
-		borderBottom: "0.2rem solid var(--dark-gray)"
+		borderBottom: "0.3rem solid var(--dark-gray)"
 	})
 };
 
