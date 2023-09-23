@@ -1,19 +1,21 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Fragment, useEffect } from "react";
 import { jsx, css } from "@emotion/react/macro";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
 
+import PhoneMultipleInputs from "../../components/PhoneMultipleInputs";
 import HeaderTitleNavigation from "../../components/HeaderTitleNavigation";
 
-import {
-	formWrapper,
-	inputBase,
-	buttonRegular,
-	inputUserIcon,
-	inputPhoneIcon
-} from "../../emotion-object-styles/form-groups";
+import { formWrapper, inputBase, buttonRegular, inputUserIcon } from "../../emotion-object-styles/form-groups";
 
 function Page() {
+	const [firstPhoneNumber, setFirstPhonenumber] = useState<string>("");
+	const [otherNumbers, setOtherNumbers] = useState<{ phone: string }[] | []>([]);
+	const [contactName, setContactName] = useState<{ firstName: string; lastName: string }>({
+		firstName: "",
+		lastName: ""
+	});
+
 	useEffect(() => {
 		document.title = "Phone App - Edit Contact";
 
@@ -22,13 +24,37 @@ function Page() {
 		};
 	}, []);
 
+	console.log(contactName);
+
 	return (
 		<Fragment>
 			<HeaderTitleNavigation title="Add New Contact" />
 
 			<form css={formWrapper}>
-				<input type="text" placeholder="Name" css={[inputBase, inputUserIcon]} />
-				<input type="text" placeholder="Phone" css={[inputBase, inputPhoneIcon]} />
+				<input
+					type="text"
+					name="first_name"
+					placeholder="First Name"
+					value={contactName.firstName}
+					css={[inputBase, inputUserIcon]}
+					onChange={(event) => setContactName({ ...contactName, firstName: event.target.value.trimStart() })}
+				/>
+
+				<input
+					type="text"
+					name="last_name"
+					placeholder="Last Name"
+					value={contactName.lastName}
+					css={[inputBase, inputUserIcon]}
+					onChange={(event) => setContactName({ ...contactName, lastName: event.target.value.trimStart() })}
+				/>
+
+				<PhoneMultipleInputs
+					otherNumbers={otherNumbers}
+					firstPhoneNumber={firstPhoneNumber}
+					onSetOtherPhoneNumbers={setOtherNumbers}
+					onSetFirstPhoneNumber={setFirstPhonenumber}
+				/>
 
 				<button type="submit" css={[buttonRegular, btnSubmit]}>
 					Save
@@ -37,25 +63,6 @@ function Page() {
 		</Fragment>
 	);
 }
-
-const header = {
-	self: css({
-		display: "flex",
-		columnGap: "1.7rem",
-		alignItems: "center"
-	}),
-
-	back: css({
-		display: "grid",
-		placeItems: "center"
-	}),
-
-	title: css({
-		fontWeight: "600",
-		fontSize: "1.6rem",
-		color: "var(--dark-gray)"
-	})
-};
 
 const btnSubmit = css({
 	width: "100%"
