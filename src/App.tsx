@@ -1,24 +1,29 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Route, Routes } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import { jsx, css } from "@emotion/react/macro";
+import { Route, Routes } from "react-router-dom";
 
-import NotFound from "./pages/404/Page";
-import ContactList from "./pages/home/Page";
-import NewContact from "./pages/add-contact/Page";
-import EditContact from "./pages/edit-contact/Page";
-import SearchContact from "./pages/search-contact/Page";
+import SkeletonsLoading from "./components/SkeletonsLoading";
+
+const ContactList = lazy(() => import("./pages/home/Page"));
+const SearchContact = lazy(() => import("./pages/search-contact/Page"));
+const NewContact = lazy(() => import("./pages/add-contact/Page"));
+const EditContact = lazy(() => import("./pages/edit-contact/Page"));
+const NotFound = lazy(() => import("./pages/404/Page"));
 
 function App() {
 	return (
 		<div css={containerCSS.self}>
-			<Routes>
-				<Route path="*" element={<NotFound />} />
-				<Route path="/" element={<ContactList />} />
-				<Route path="/search-contact" element={<SearchContact />} />
-				<Route path="/new-contact" element={<NewContact />} />
-				<Route path="/edit-contact/:id" element={<EditContact />} />
-			</Routes>
+			<Suspense fallback={<SkeletonsLoading />}>
+				<Routes>
+					<Route path="/" element={<ContactList />} />
+					<Route path="/search-contact" element={<SearchContact />} />
+					<Route path="/new-contact" element={<NewContact />} />
+					<Route path="/edit-contact/:id" element={<EditContact />} />
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</Suspense>
 		</div>
 	);
 }
