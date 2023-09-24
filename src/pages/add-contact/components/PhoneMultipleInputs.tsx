@@ -56,6 +56,7 @@ function PhoneMultipleInputs({
 				<button
 					type="button"
 					css={phoneMultiple.button}
+					aria-label="Add another phone input"
 					disabled={formStatus === "submitting"}
 					onClick={handleAddPhoneNumberInputClick}>
 					<svg width="19" height="19" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">

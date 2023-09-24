@@ -54,7 +54,7 @@ function SearchContact({ contactQuery, onSetQuery, onSearching }: Props) {
 	return (
 		<div css={searchContactSection.self}>
 			<div css={searchContactSection.newContactNavigate}>
-				<Link to="/">
+				<Link to="/" aria-label="Back to home">
 					<svg width="13" height="23" viewBox="0 0 28 46" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path
 							d="M25.84 38.52 10.32 23 25.84 7.48a3.983 3.983 0 0 0 0-5.64 3.983 3.983 0 0 0-5.64 0L1.84 20.2a3.983 3.983 0 0 0 0 5.64L20.2 44.2a3.983 3.983 0 0 0 5.64 0c1.52-1.56 1.56-4.12 0-5.68Z"

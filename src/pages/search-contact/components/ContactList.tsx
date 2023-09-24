@@ -25,7 +25,7 @@ function ContactList({ loading, contacts }: Props) {
 	}
 
 	return (
-		<Fragment>
+		<main>
 			{contacts.contact.map((contact: any) => (
 				<div key={contact.id} css={contactStyle.self}>
 					<div css={contactStyle.avatar}>{contact.first_name[0]}</div>
@@ -48,7 +48,7 @@ function ContactList({ loading, contacts }: Props) {
 					</div>
 				</div>
 			))}
-		</Fragment>
+		</main>
 	);
 }
 

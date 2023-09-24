@@ -3,10 +3,10 @@
 import { Link } from "react-router-dom";
 import { jsx, css } from "@emotion/react/macro";
 
-function HeaderTitleNavigation({ title }: { title: string }) {
+function HeaderTitleNavigation() {
 	return (
 		<header css={header.self}>
-			<Link to="/" css={header.back}>
+			<Link to="/" css={header.back} aria-label="Back to home">
 				<svg width="13" height="23" viewBox="0 0 28 46" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<path
 						d="M25.84 38.52 10.32 23 25.84 7.48a3.983 3.983 0 0 0 0-5.64 3.983 3.983 0 0 0-5.64 0L1.84 20.2a3.983 3.983 0 0 0 0 5.64L20.2 44.2a3.983 3.983 0 0 0 5.64 0c1.52-1.56 1.56-4.12 0-5.68Z"
@@ -15,7 +15,7 @@ function HeaderTitleNavigation({ title }: { title: string }) {
 				</svg>
 			</Link>
 
-			<h1 css={header.title}>{title}</h1>
+			<h1 css={header.title}>Add New Contact</h1>
 		</header>
 	);
 }

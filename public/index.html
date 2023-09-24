@@ -9,9 +9,70 @@
 	<meta
 		name="description"
 		content="Web site created using create-react-app" />
+
+	<style type="text/css">
+		:root {
+			--font-family: "Poppins", sans-serif;
+			--dim-gray: #6a6a6a;
+			--dark-gray: #212121;
+			--slate-gray: #9ca3af
+		}
+
+		*,
+		:after,
+		:before {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0
+		}
+
+		*,
+		:after,
+		:before,
+		html {
+			font-family: Poppins, sans-serif;
+			font-family: var(--font-family)
+		}
+
+		html {
+			font-size: 62.5%
+		}
+
+		body {
+			background-color: #fff
+		}
+
+		button {
+			cursor: pointer
+		}
+
+		input[type=search]::-webkit-search-cancel-button,
+		input[type=search]::-webkit-search-decoration,
+		input[type=search]::-webkit-search-results-button,
+		input[type=search]::-webkit-search-results-decoration {
+			-webkit-appearance: none
+		}
+
+		input::-webkit-contacts-auto-fill-button {
+			display: none !important;
+			pointer-events: none;
+			position: absolute;
+			right: 0;
+			visibility: hidden
+		}
+
+		button:disabled,
+		input:disabled {
+			opacity: .66;
+			pointer-events: none
+		}
+	</style>
+
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" media="print"
+		onload="this.onload=null;this.removeAttribute('media');">
 	<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
 	<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 	<title>Phone App</title>

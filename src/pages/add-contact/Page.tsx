@@ -6,7 +6,7 @@ import { FormEvent, Fragment, useEffect, useState } from "react";
 
 import ModalNotify from "../../components/ModalNotify";
 import PhoneMultipleInputs from "./components/PhoneMultipleInputs";
-import HeaderTitleNavigation from "../../components/HeaderTitleNavigation";
+import HeaderTitleNavigation from "./components/HeaderTitleNavigation";
 
 import { FormStatusType } from "../../types/form";
 import { ADD_CONTACT } from "./grapql-queries/queries";
@@ -104,7 +104,7 @@ function Page() {
 
 	return (
 		<Fragment>
-			<HeaderTitleNavigation title="Add New Contact" />
+			<HeaderTitleNavigation />
 
 			<form css={formWrapper} onSubmit={handleSubmitForm}>
 				<input
