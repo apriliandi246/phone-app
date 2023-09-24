@@ -8,9 +8,13 @@ import HeaderTitleNavigation from "../../components/HeaderTitleNavigation";
 import { formWrapper, inputBase, buttonRegular, inputUserIcon } from "../../emotion-object-styles/form-groups";
 import PhoneMultipleInputs from "../../components/PhoneMultipleInputs";
 
+type FormStatusType = "empty" | "filled" | "submitting" | "success";
+
 function Page() {
+	const [error, setError] = useState(null);
+	const [status, setStatus] = useState<FormStatusType>("empty");
 	const [firstPhoneNumber, setFirstPhonenumber] = useState<string>("");
-	const [otherNumbers, setOtherNumbers] = useState<{ phone: string }[] | []>([]);
+	const [otherNumbers, setOtherNumbers] = useState<{ number: string }[] | []>([]);
 	const [contactName, setContactName] = useState<{ firstName: string; lastName: string }>({
 		firstName: "",
 		lastName: ""
@@ -48,6 +52,7 @@ function Page() {
 				/>
 
 				<PhoneMultipleInputs
+					formStatus={status}
 					otherNumbers={otherNumbers}
 					firstPhoneNumber={firstPhoneNumber}
 					onSetOtherPhoneNumbers={setOtherNumbers}

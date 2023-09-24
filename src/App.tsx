@@ -4,7 +4,7 @@ import { Suspense, lazy } from "react";
 import { jsx, css } from "@emotion/react/macro";
 import { Route, Routes } from "react-router-dom";
 
-import SkeletonsLoading from "./components/SkeletonsLoading";
+import SpinnerLoading from "./components/SpinnerLoading";
 
 const ContactList = lazy(() => import("./pages/home/Page"));
 const SearchContact = lazy(() => import("./pages/search-contact/Page"));
@@ -15,7 +15,7 @@ const NotFound = lazy(() => import("./pages/404/Page"));
 function App() {
 	return (
 		<div css={containerCSS.self}>
-			<Suspense fallback={<SkeletonsLoading />}>
+			<Suspense fallback={<SpinnerLoading />}>
 				<Routes>
 					<Route path="/" element={<ContactList />} />
 					<Route path="/search-contact" element={<SearchContact />} />

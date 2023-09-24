@@ -5,21 +5,30 @@ import { jsx, css } from "@emotion/react/macro";
 
 import { inputBase, inputPhoneIcon } from "../emotion-object-styles/form-groups";
 
+type FormStatusType = "empty" | "filled" | "submitting" | "success" | "error";
+
 interface Props {
+	formStatus: FormStatusType;
 	firstPhoneNumber: string;
-	otherNumbers: { phone: string }[] | [];
+	otherNumbers: { number: string }[] | [];
 	onSetFirstPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
-	onSetOtherPhoneNumbers: React.Dispatch<React.SetStateAction<{ phone: string }[] | []>>;
+	onSetOtherPhoneNumbers: React.Dispatch<React.SetStateAction<{ number: string }[] | []>>;
 }
 
-function PhoneMultipleInputs({ firstPhoneNumber, otherNumbers, onSetFirstPhoneNumber, onSetOtherPhoneNumbers }: Props) {
+function PhoneMultipleInputs({
+	formStatus,
+	otherNumbers,
+	firstPhoneNumber,
+	onSetFirstPhoneNumber,
+	onSetOtherPhoneNumbers
+}: Props) {
 	function handleAddPhoneNumberInputClick() {
-		onSetOtherPhoneNumbers([...otherNumbers, { phone: "" }]);
+		onSetOtherPhoneNumbers([...otherNumbers, { number: "" }]);
 	}
 
 	function handleOtherPhonerInputChange(value: string, inputOrder: number) {
 		const phoneNumbers = [...otherNumbers];
-		phoneNumbers[inputOrder].phone = value;
+		phoneNumbers[inputOrder].number = value;
 
 		onSetOtherPhoneNumbers(phoneNumbers);
 	}
@@ -40,10 +49,15 @@ function PhoneMultipleInputs({ firstPhoneNumber, otherNumbers, onSetFirstPhoneNu
 					placeholder="Phone"
 					value={firstPhoneNumber}
 					css={[inputBase, inputPhoneIcon]}
+					disabled={formStatus === "submitting"}
 					onChange={(event) => onSetFirstPhoneNumber(event.target.value.trimStart())}
 				/>
 
-				<button type="button" css={phoneMultiple.button} onClick={handleAddPhoneNumberInputClick}>
+				<button
+					type="button"
+					css={phoneMultiple.button}
+					disabled={formStatus === "submitting"}
+					onClick={handleAddPhoneNumberInputClick}>
 					<svg width="19" height="19" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path
 							d="M52 32H32v20c0 2.2-1.8 4-4 4s-4-1.8-4-4V32H4c-2.2 0-4-1.8-4-4s1.8-4 4-4h20V4c0-2.2 1.8-4 4-4s4 1.8 4 4v20h20c2.2 0 4 1.8 4 4s-1.8 4-4 4Z"
@@ -58,12 +72,17 @@ function PhoneMultipleInputs({ firstPhoneNumber, otherNumbers, onSetFirstPhoneNu
 						<input
 							type="text"
 							placeholder="Phone"
-							value={phoneNumber.phone}
+							value={phoneNumber.number}
 							css={[inputBase, inputPhoneIcon]}
+							disabled={formStatus === "submitting"}
 							onChange={(event) => handleOtherPhonerInputChange(event.target.value, index)}
 						/>
 
-						<button type="button" css={phoneMultiple.button} onClick={() => handleDeleteOtherPhoneInput(index)}>
+						<button
+							type="button"
+							css={phoneMultiple.button}
+							disabled={formStatus === "submitting"}
+							onClick={() => handleDeleteOtherPhoneInput(index)}>
 							<svg width="17" height="17" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path
 									d="M52.2 1.84001C50.64 0.280006 48.12 0.280006 46.56 1.84001L27 21.36L7.44001 1.8C5.88001 0.240005 3.36001 0.240005 1.8 1.8C0.240005 3.36001 0.240005 5.88001 1.8 7.44001L21.36 27L1.8 46.56C0.240005 48.12 0.240005 50.64 1.8 52.2C3.36001 53.76 5.88001 53.76 7.44001 52.2L27 32.64L46.56 52.2C48.12 53.76 50.64 53.76 52.2 52.2C53.76 50.64 53.76 48.12 52.2 46.56L32.64 27L52.2 7.44001C53.72 5.92001 53.72 3.36001 52.2 1.84001Z"

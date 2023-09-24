@@ -12,17 +12,17 @@ import CategoryContact from "./components/CategoryContact";
 import SkeletonsLoading from "../../components/SkeletonsLoading";
 import ModalDeleteConfirmation from "./components/ModalDeleteConfirmation";
 
-import { ContactType } from "./types/contactList";
+import { ContactListType } from "../../types/contact";
 import { GET_CONTACT_LIST } from "./grapql-queries/queries";
 
 function Page() {
-	const [loadContactList, { loading, data, error }] = useLazyQuery(GET_CONTACT_LIST);
+	const [loadContactList, { loading, data }] = useLazyQuery(GET_CONTACT_LIST);
 
 	const [contactTab, setContactTab] = useState("all");
-	const [contacts, setContacts] = useState<ContactType>([]);
+	const [contacts, setContacts] = useState<ContactListType>([]);
 	const [isContactDeleted, setContactDeleted] = useState<boolean>(false);
 	const [isContactDeleting, setContactDeleting] = useState<boolean>(false);
-	const [favoriteContacts, setFavoriteContacts] = useState<ContactType>([]);
+	const [favoriteContacts, setFavoriteContacts] = useState<ContactListType>([]);
 	const [modalContactSelected, setModalContactSelected] = useState<{ isOpen: boolean; contactId: number }>({
 		isOpen: false,
 		contactId: -1
@@ -36,6 +36,17 @@ function Page() {
 		} else {
 			const contactList = JSON.parse(contacts);
 			setContacts(contactList);
+		}
+	}, []);
+
+	useEffect(() => {
+		const favoriteContacts = localStorage.getItem("favoriteContacts");
+
+		if (favoriteContacts !== null) {
+			const contactListParsed = JSON.parse(favoriteContacts);
+			setFavoriteContacts(contactListParsed);
+		} else {
+			localStorage.setItem("favoriteContacts", "[]");
 		}
 	}, []);
 
@@ -66,7 +77,7 @@ function Page() {
 	return (
 		<Fragment>
 			<div css={mainContainer.self}>
-				<Header totalContacts={contacts.length} />
+				<Header totalContacts={contacts.length + favoriteContacts.length} />
 
 				<Menus />
 

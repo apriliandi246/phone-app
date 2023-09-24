@@ -1,4 +1,4 @@
-export type ContactType =
+export type ContactListType =
 	| {
 			id: number;
 			first_name: string;
@@ -8,7 +8,7 @@ export type ContactType =
 	  }[]
 	| [];
 
-export type ContactData = {
+export type ContactDataType = {
 	id: number;
 	first_name: string;
 	last_name: string;

@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 import { jsx, css } from "@emotion/react/macro";
 import { Fragment, useState } from "react";
 
-import { ContactType, ContactData } from "../types/contactList";
+import { ContactListType, ContactDataType } from "../../../types/contact";
 import { buttonRegular } from "../../../emotion-object-styles/form-groups";
 
 interface Props {
-	contacts: ContactType;
+	contacts: ContactListType;
 	categoryType: "all" | "favorite";
-	onSetAllContacts: React.Dispatch<React.SetStateAction<ContactType>>;
-	onSetFavoriteContacts: React.Dispatch<React.SetStateAction<ContactType>>;
+	onSetAllContacts: React.Dispatch<React.SetStateAction<ContactListType>>;
+	onSetFavoriteContacts: React.Dispatch<React.SetStateAction<ContactListType>>;
 	onOpenModalDeleteConfirmation: React.Dispatch<React.SetStateAction<{ isOpen: boolean; contactId: number }>>;
 }
 
@@ -22,12 +22,14 @@ function CategoryContacts({
 	onSetFavoriteContacts,
 	onOpenModalDeleteConfirmation
 }: Props) {
-	const contactsPerPage = 10;
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemSelected, setItemSelected] = useState<number>(-1);
 
+	const contactsPerPage = 10;
 	const startIndex = (currentPage - 1) * contactsPerPage;
 	const endIndex = startIndex + contactsPerPage;
+	const totalPages = Math.ceil(contacts.length / contactsPerPage);
+	const showNextButton = currentPage < totalPages;
 	const currentContacts = contacts.slice(startIndex, endIndex);
 
 	function toggleMenu(index: number) {
@@ -42,31 +44,40 @@ function CategoryContacts({
 		onOpenModalDeleteConfirmation({ isOpen: true, contactId });
 	}
 
-	function handleToggleFavoriteContact(contact: ContactData, index: number) {
-		if (categoryType === "all") {
-			onSetAllContacts((prevState) => {
-				const contact = [...prevState];
-				contact.splice(index, 1);
+	function handleToggleFavoriteContact(contact: ContactDataType) {
+		const selectedContactId: number = contact.id;
+		const allContacts: string | null = localStorage.getItem("contacts");
+		const favoriteContacts: string | null = localStorage.getItem("favoriteContacts");
 
-				return contact;
-			});
+		if (allContacts && favoriteContacts) {
+			let allContactsFiletered;
+			let favoriteContactsFiltered;
 
-			onSetFavoriteContacts((prevState) => {
-				return [...prevState, contact];
-			});
+			const allContactsParsed: ContactListType = JSON.parse(allContacts);
+			const favoriteContactsParsed: ContactListType = JSON.parse(favoriteContacts);
+
+			if (categoryType === "all") {
+				allContactsFiletered = allContactsParsed.filter((contact) => contact.id !== selectedContactId);
+				favoriteContactsFiltered = [...favoriteContactsParsed, contact];
+
+				onSetAllContacts(allContactsFiletered);
+				onSetFavoriteContacts(favoriteContactsFiltered);
+			}
+
+			if (categoryType === "favorite") {
+				favoriteContactsFiltered = favoriteContactsParsed.filter((contact) => contact.id !== selectedContactId);
+				allContactsFiletered = [...allContactsParsed, contact];
+
+				onSetAllContacts(allContactsFiletered);
+				onSetFavoriteContacts(favoriteContactsFiltered);
+			}
+
+			localStorage.setItem("favoriteContacts", JSON.stringify(favoriteContactsFiltered));
+			localStorage.setItem("contacts", JSON.stringify(allContactsFiletered));
 		}
 
-		if (categoryType === "favorite") {
-			onSetFavoriteContacts((prevState) => {
-				const contact = [...prevState];
-				contact.splice(index, 1);
-
-				return contact;
-			});
-
-			onSetAllContacts((prevState) => {
-				return [...prevState, contact];
-			});
+		if (currentContacts.length === 1) {
+			setCurrentPage(1);
 		}
 	}
 
@@ -120,7 +131,7 @@ function CategoryContacts({
 									<button
 										type="button"
 										css={contactItem.buttonMenu}
-										onClick={() => handleToggleFavoriteContact(contact, index)}>
+										onClick={() => handleToggleFavoriteContact(contact)}>
 										{categoryType === "all" && (
 											<svg width="18" height="18" viewBox="0 0 70 66" fill="none" xmlns="http://www.w3.org/2000/svg">
 												<path
@@ -180,7 +191,7 @@ function CategoryContacts({
 					</button>
 				)}
 
-				{endIndex <= contacts.length && (
+				{showNextButton && (
 					<button type="button" css={buttonRegular} onClick={() => setCurrentPage((prevState) => prevState + 1)}>
 						Next
 					</button>

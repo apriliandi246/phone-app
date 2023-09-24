@@ -1,14 +1,14 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react/macro";
-import { ContactType } from "../../home/types/contactList";
 import { Fragment } from "react";
 
-import SpinnerLoading from "../../home/components/SpinnerLoading";
+import { ContactListType } from "../../../types/contact";
+import SpinnerLoading from "../../../components/SpinnerLoading";
 
 interface Props {
 	loading: boolean;
-	contacts: { contact: ContactType[] };
+	contacts: { contact: ContactListType[] };
 }
 
 function ContactList({ loading, contacts }: Props) {

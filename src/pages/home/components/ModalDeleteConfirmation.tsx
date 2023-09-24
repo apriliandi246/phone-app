@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { jsx, css } from "@emotion/react/macro";
 
-import { ContactType } from "../types/contactList";
+import { ContactListType } from "../../../types/contact";
 import { DELETE_CONTACT } from "../grapql-queries/queries";
 import { buttonRegular, buttonDanger } from "../../../emotion-object-styles/form-groups";
 
@@ -43,17 +43,14 @@ function ModalDeleteConfirmation({ contactId, isDeleting, onClose, onDeleting, o
 			const contactsString = localStorage.getItem("contacts");
 
 			if (contactsString !== null) {
-				const contacts: ContactType = JSON.parse(contactsString);
+				const contacts: ContactListType = JSON.parse(contactsString);
 				const filteredContacts = contacts.filter((contact) => contact.id !== contactId);
 
 				localStorage.setItem("contacts", JSON.stringify(filteredContacts));
 			}
 
 			onDeleting(false);
-			onClose({
-				contactId: -1,
-				isOpen: false
-			});
+			onClose({ contactId: -1, isOpen: false });
 			onContactDeleted(true);
 		}
 	}, [loading]);

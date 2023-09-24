@@ -39,7 +39,7 @@ function SearchContact({ contactQuery, onSetQuery, onSearching }: Props) {
 		onSetQuery(value.trimStart());
 	}
 
-	function handleInputKeyup(event: KeyboardEvent) {
+	function handleInputKeyup(event: KeyboardEvent<HTMLInputElement>) {
 		if (event.key === "Enter" && contactQuery !== "") {
 			setPressedEnter(true);
 			onSearching(true);

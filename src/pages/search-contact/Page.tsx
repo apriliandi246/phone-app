@@ -1,7 +1,4 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
 import { useLazyQuery } from "@apollo/client";
-import { jsx, css } from "@emotion/react/macro";
 import { Fragment, useState, useEffect } from "react";
 
 import ContactList from "./components/ContactList";
@@ -12,7 +9,7 @@ import { SEARCH_CONTACT } from "./grapql-queries/queries";
 function Page() {
 	const [contactQuery, setContactQuery] = useState<string>("");
 	const [isSearching, setSearching] = useState<boolean>(false);
-	const [searchContact, { data, loading, error }] = useLazyQuery(SEARCH_CONTACT, {
+	const [searchContact, { data, loading }] = useLazyQuery(SEARCH_CONTACT, {
 		fetchPolicy: "no-cache"
 	});
 
@@ -37,7 +34,7 @@ function Page() {
 	}, [isSearching]);
 
 	useEffect(() => {
-		if (loading === false) {
+		if (loading === false && isSearching === true) {
 			setSearching(false);
 		}
 	}, [loading]);
