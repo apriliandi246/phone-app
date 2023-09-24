@@ -244,7 +244,8 @@ const contactItem = {
 	}),
 
 	name: css({
-		fontSize: "1.6rem",
+		fontWeight: "500",
+		fontSize: "1.5rem",
 		color: "var(--dark-gray)"
 	}),
 

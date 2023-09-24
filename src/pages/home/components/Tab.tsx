@@ -47,7 +47,7 @@ const tab = {
 		color: "#6d7588",
 		padding: "1.6rem",
 		borderRadius: "0",
-		fontWeight: "700",
+		fontWeight: "600",
 		fontSize: "1.5rem",
 		alignItems: "center",
 		justifyContent: "center"
