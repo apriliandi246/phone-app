@@ -110,7 +110,7 @@ const searchContactSection = {
 	self: css({
 		gap: "1rem",
 		display: "grid",
-		marginBottom: "3rem",
+		marginBottom: "5rem",
 		gridTemplateColumns: "repeat(12, 1fr)"
 	}),
 

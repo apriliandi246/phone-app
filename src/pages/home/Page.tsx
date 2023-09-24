@@ -125,25 +125,4 @@ const mainContainer = {
 	})
 };
 
-const menus = {
-	self: css({
-		gap: "3rem",
-		display: "flex",
-		marginTop: "3rem",
-		alignItems: "center",
-		marginBottom: "1rem",
-		justifyContent: "center"
-	}),
-
-	menuItem: css({
-		gap: "0.5rem",
-		display: "flex",
-		fontSize: "1.2rem",
-		alignItems: "center",
-		textDecoration: "none",
-		flexDirection: "column",
-		color: "var(--dark-gray)"
-	})
-};
-
 export default Page;
