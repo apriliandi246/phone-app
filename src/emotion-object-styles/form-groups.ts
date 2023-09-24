@@ -10,13 +10,6 @@ const buttonBase = css({
 	transition: "background-color 100ms"
 });
 
-export const formWrapper = css({
-	gap: "2rem",
-	display: "flex",
-	marginTop: "5rem",
-	flexDirection: "column"
-});
-
 export const inputBase = css({
 	width: "100%",
 	fontSize: "1.4rem",

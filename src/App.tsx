@@ -9,7 +9,6 @@ import SpinnerLoading from "./components/SpinnerLoading";
 const ContactList = lazy(() => import("./pages/home/Page"));
 const SearchContact = lazy(() => import("./pages/search-contact/Page"));
 const NewContact = lazy(() => import("./pages/add-contact/Page"));
-const EditContact = lazy(() => import("./pages/edit-contact/Page"));
 const NotFound = lazy(() => import("./pages/404/Page"));
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
 					<Route path="/" element={<ContactList />} />
 					<Route path="/search-contact" element={<SearchContact />} />
 					<Route path="/new-contact" element={<NewContact />} />
-					<Route path="/edit-contact/:id" element={<EditContact />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</Suspense>

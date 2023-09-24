@@ -108,7 +108,7 @@ const contactStyle = {
 };
 
 const noContacts = css({
-	fontSize: "1.3rem",
+	fontSize: "1.4rem",
 	textAlign: "center"
 });
 

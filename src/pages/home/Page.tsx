@@ -9,7 +9,7 @@ import Menus from "./components/Menus";
 import Header from "./components/Header";
 import ModalNotify from "../../components/ModalNotify";
 import CategoryContact from "./components/CategoryContact";
-import SkeletonsLoading from "../../components/SkeletonsLoading";
+import SkeletonsLoading from "./components/SkeletonsLoading";
 import ModalDeleteConfirmation from "./components/ModalDeleteConfirmation";
 
 import { ContactListType } from "../../types/contact";
@@ -29,21 +29,21 @@ function Page() {
 	});
 
 	useEffect(() => {
-		const contacts = localStorage.getItem("contacts");
+		const allContacts: string | null = localStorage.getItem("allContacts");
 
-		if (contacts === null) {
+		if (allContacts === null) {
 			loadContactList();
 		} else {
-			const contactList = JSON.parse(contacts);
-			setContacts(contactList);
+			const allContactsParsed: ContactListType = JSON.parse(allContacts);
+			setContacts(allContactsParsed);
 		}
 	}, []);
 
 	useEffect(() => {
-		const favoriteContacts = localStorage.getItem("favoriteContacts");
+		const favoriteContacts: string | null = localStorage.getItem("favoriteContacts");
 
 		if (favoriteContacts !== null) {
-			const contactListParsed = JSON.parse(favoriteContacts);
+			const contactListParsed: ContactListType = JSON.parse(favoriteContacts);
 			setFavoriteContacts(contactListParsed);
 		} else {
 			localStorage.setItem("favoriteContacts", "[]");
@@ -52,20 +52,20 @@ function Page() {
 
 	useEffect(() => {
 		if (loading === false && data !== undefined) {
-			const contacts = JSON.stringify(data.contact);
+			const allContacts: string = JSON.stringify(data.contact);
 
 			setContacts(data.contact);
-			localStorage.setItem("contacts", contacts);
+			localStorage.setItem("allContacts", allContacts);
 		}
 	}, [loading]);
 
 	useEffect(() => {
 		if (isContactDeleted === true) {
-			const contacts = localStorage.getItem("contacts");
+			const allContacts: string | null = localStorage.getItem("allContacts");
 
-			if (contacts !== null) {
-				const contactList = JSON.parse(contacts);
-				setContacts(contactList);
+			if (allContacts !== null) {
+				const allContactsParsed: ContactListType = JSON.parse(allContacts);
+				setContacts(allContactsParsed);
 			}
 		}
 	}, [isContactDeleted]);
@@ -88,6 +88,7 @@ function Page() {
 				{contactTab === "all" && (
 					<CategoryContact
 						categoryType="all"
+						isLoading={loading}
 						contacts={contacts}
 						onSetAllContacts={setContacts}
 						onSetFavoriteContacts={setFavoriteContacts}
@@ -97,6 +98,7 @@ function Page() {
 
 				{contactTab === "favorite" && (
 					<CategoryContact
+						isLoading={loading}
 						categoryType="favorite"
 						contacts={favoriteContacts}
 						onSetAllContacts={setContacts}

@@ -5,12 +5,13 @@ import { jsx, css } from "@emotion/react/macro";
 import { FormEvent, Fragment, useEffect, useState } from "react";
 
 import ModalNotify from "../../components/ModalNotify";
-import PhoneMultipleInputs from "../../components/PhoneMultipleInputs";
+import PhoneMultipleInputs from "./components/PhoneMultipleInputs";
 import HeaderTitleNavigation from "../../components/HeaderTitleNavigation";
 
 import { FormStatusType } from "../../types/form";
 import { ADD_CONTACT } from "./grapql-queries/queries";
-import { formWrapper, inputBase, buttonRegular, inputUserIcon } from "../../emotion-object-styles/form-groups";
+import { inputBase, buttonRegular, inputUserIcon } from "../../emotion-object-styles/form-groups";
+import { ContactListType } from "../../types/contact";
 
 function Page() {
 	const [addContact, { loading, data, error }] = useMutation(ADD_CONTACT);
@@ -32,7 +33,8 @@ function Page() {
 	}, []);
 
 	useEffect(() => {
-		const hasEmptyValues = firstPhoneNumber === "" || contactName.firstName === "" || contactName.lastName === "";
+		const hasEmptyValues: boolean =
+			firstPhoneNumber === "" || contactName.firstName === "" || contactName.lastName === "";
 
 		if (hasEmptyValues === false) {
 			setStatus("filled");
@@ -44,19 +46,20 @@ function Page() {
 	}, [firstPhoneNumber, contactName]);
 
 	useEffect(() => {
-		if (error === undefined && loading === false && status === "submitting") {
-			const contactsString = localStorage.getItem("contacts");
+		const successStatus: boolean = error === undefined && loading === false && status === "submitting";
+
+		if (successStatus === true) {
+			const allContacts: string | null = localStorage.getItem("allContacts");
 
 			setContactName({ firstName: "", lastName: "" });
 			setFirstPhonenumber("");
 			setOtherNumbers([]);
 
-			if (contactsString !== null) {
-				const contacts = JSON.parse(contactsString);
-				const newContacts = JSON.stringify([...contacts, ...data.insert_contact.returning]);
+			if (allContacts !== null) {
+				const contactsParsed: ContactListType = JSON.parse(allContacts);
+				const newContacts: string = JSON.stringify([...contactsParsed, ...data.insert_contact.returning]);
 
-				localStorage.setItem("contacts", newContacts);
-
+				localStorage.setItem("allContacts", newContacts);
 				setStatus("success");
 			}
 		}
@@ -65,7 +68,9 @@ function Page() {
 	function handleSubmitForm(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 
-		if (firstPhoneNumber === "" || contactName.firstName === "" || contactName.lastName === "") {
+		const isStillEmty = firstPhoneNumber === "" || contactName.firstName === "" || contactName.lastName === "";
+
+		if (isStillEmty === true) {
 			return;
 		}
 
@@ -145,6 +150,13 @@ function Page() {
 		</Fragment>
 	);
 }
+
+const formWrapper = css({
+	gap: "2rem",
+	display: "flex",
+	marginTop: "5rem",
+	flexDirection: "column"
+});
 
 const btnSubmit = css({
 	width: "100%"

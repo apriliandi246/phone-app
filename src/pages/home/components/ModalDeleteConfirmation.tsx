@@ -20,7 +20,7 @@ function ModalDeleteConfirmation({ contactId, isDeleting, onClose, onDeleting, o
 	const [deleteContact, { loading, data, error }] = useMutation(DELETE_CONTACT);
 
 	useEffect(() => {
-		const body = document.body;
+		const body: HTMLElement = document.body;
 		body.style.overflow = "hidden";
 
 		return () => {
@@ -40,13 +40,13 @@ function ModalDeleteConfirmation({ contactId, isDeleting, onClose, onDeleting, o
 
 	useEffect(() => {
 		if (loading === false && isDeleting === true) {
-			const contactsString = localStorage.getItem("contacts");
+			const contactsString: string | null = localStorage.getItem("allContacts");
 
 			if (contactsString !== null) {
 				const contacts: ContactListType = JSON.parse(contactsString);
-				const filteredContacts = contacts.filter((contact) => contact.id !== contactId);
+				const filteredContacts: ContactListType = contacts.filter((contact) => contact.id !== contactId);
 
-				localStorage.setItem("contacts", JSON.stringify(filteredContacts));
+				localStorage.setItem("allContacts", JSON.stringify(filteredContacts));
 			}
 
 			onDeleting(false);

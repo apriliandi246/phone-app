@@ -1,6 +1,5 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Link } from "react-router-dom";
 import { jsx, css } from "@emotion/react/macro";
 import { Fragment, useState } from "react";
 
@@ -8,6 +7,7 @@ import { ContactListType, ContactDataType } from "../../../types/contact";
 import { buttonRegular } from "../../../emotion-object-styles/form-groups";
 
 interface Props {
+	isLoading: boolean;
 	contacts: ContactListType;
 	categoryType: "all" | "favorite";
 	onSetAllContacts: React.Dispatch<React.SetStateAction<ContactListType>>;
@@ -17,20 +17,21 @@ interface Props {
 
 function CategoryContacts({
 	contacts,
+	isLoading,
 	categoryType,
 	onSetAllContacts,
 	onSetFavoriteContacts,
 	onOpenModalDeleteConfirmation
 }: Props) {
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [itemSelected, setItemSelected] = useState<number>(-1);
 
-	const contactsPerPage = 10;
-	const startIndex = (currentPage - 1) * contactsPerPage;
-	const endIndex = startIndex + contactsPerPage;
-	const totalPages = Math.ceil(contacts.length / contactsPerPage);
-	const showNextButton = currentPage < totalPages;
-	const currentContacts = contacts.slice(startIndex, endIndex);
+	const contactsPerPage: number = 10;
+	const startIndex: number = (currentPage - 1) * contactsPerPage;
+	const endIndex: number = startIndex + contactsPerPage;
+	const totalPage: number = Math.ceil(contacts.length / contactsPerPage);
+	const showNextButton: boolean = currentPage < totalPage;
+	const currentContacts: ContactListType = contacts.slice(startIndex, endIndex);
 
 	function toggleMenu(index: number) {
 		if (index === itemSelected) {
@@ -46,7 +47,7 @@ function CategoryContacts({
 
 	function handleToggleFavoriteContact(contact: ContactDataType) {
 		const selectedContactId: number = contact.id;
-		const allContacts: string | null = localStorage.getItem("contacts");
+		const allContacts: string | null = localStorage.getItem("allContacts");
 		const favoriteContacts: string | null = localStorage.getItem("favoriteContacts");
 
 		if (allContacts && favoriteContacts) {
@@ -73,7 +74,7 @@ function CategoryContacts({
 			}
 
 			localStorage.setItem("favoriteContacts", JSON.stringify(favoriteContactsFiltered));
-			localStorage.setItem("contacts", JSON.stringify(allContactsFiletered));
+			localStorage.setItem("allContacts", JSON.stringify(allContactsFiletered));
 		}
 
 		if (currentContacts.length === 1) {
@@ -81,7 +82,7 @@ function CategoryContacts({
 		}
 	}
 
-	if (contacts.length === 0) {
+	if (isLoading === false && contacts.length === 0) {
 		return <div css={noContacts}>No Contacts</div>;
 	}
 
@@ -153,22 +154,11 @@ function CategoryContacts({
 										<span>Favorite</span>
 									</button>
 
-									<Link to={`/edit-contact/${contact.id}`} css={contactItem.buttonMenu}>
-										<svg width="16" height="16" viewBox="0 0 73 73" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<path
-												d="M0 58.84V71c0 1.12.88 2 2 2h12.16c.52 0 1.04-.2 1.4-.6l43.68-43.64-15-15L.6 57.4c-.4.4-.6.88-.6 1.44Zm70.84-41.68a3.983 3.983 0 0 0 0-5.64l-9.36-9.36a3.983 3.983 0 0 0-5.64 0l-7.32 7.32 15 15 7.32-7.32Z"
-												fill="var(--dim-gray)"
-											/>
-										</svg>
-
-										<span>Edit</span>
-									</Link>
-
 									<button
 										type="button"
 										css={contactItem.buttonMenu}
 										onClick={() => showModalDeleteConfirmation(contact.id)}>
-										<svg width="16" height="14" viewBox="0 0 56 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<svg width="18" height="18" viewBox="0 0 56 72" fill="none" xmlns="http://www.w3.org/2000/svg">
 											<path
 												d="M4 64c0 4.4 3.6 8 8 8h32c4.4 0 8-3.6 8-8V24c0-4.4-3.6-8-8-8H12c-4.4 0-8 3.6-8 8v40ZM52 4H42l-2.84-2.84A4.035 4.035 0 0 0 36.36 0H19.64c-1.04 0-2.08.44-2.8 1.16L14 4H4C1.8 4 0 5.8 0 8s1.8 4 4 4h48c2.2 0 4-1.8 4-4s-1.8-4-4-4Z"
 												fill="var(--dim-gray)"
@@ -200,12 +190,6 @@ function CategoryContacts({
 		</Fragment>
 	);
 }
-
-const noContacts = css({
-	fontSize: "1.3rem",
-	textAlign: "center",
-	marginTop: "6.7rem"
-});
 
 const contactItem = {
 	self: css({
@@ -275,10 +259,11 @@ const contactItem = {
 	}),
 
 	menus: css({
+		gap: "4rem",
 		display: "flex",
 		alignItems: "center",
 		paddingInline: "1.7rem",
-		justifyContent: "space-around"
+		justifyContent: "center"
 	}),
 
 	phoneNumbers: css({
@@ -316,6 +301,12 @@ const contactItem = {
 		}
 	})
 };
+
+const noContacts = css({
+	fontSize: "1.4rem",
+	textAlign: "center",
+	marginTop: "6.7rem"
+});
 
 const paginatioNav = {
 	self: css({
