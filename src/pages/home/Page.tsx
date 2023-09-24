@@ -18,9 +18,9 @@ import { GET_CONTACT_LIST } from "./grapql-queries/queries";
 function Page() {
 	const [loadContactList, { loading, data }] = useLazyQuery(GET_CONTACT_LIST);
 
-	const [contactTab, setContactTab] = useState("all");
 	const [contacts, setContacts] = useState<ContactListType>([]);
 	const [isContactDeleted, setContactDeleted] = useState<boolean>(false);
+	const [contactTab, setContactTab] = useState<"all" | "favorite">("all");
 	const [isContactDeleting, setContactDeleting] = useState<boolean>(false);
 	const [favoriteContacts, setFavoriteContacts] = useState<ContactListType>([]);
 	const [modalContactSelected, setModalContactSelected] = useState<{ isOpen: boolean; contactId: number }>({
@@ -61,11 +61,19 @@ function Page() {
 
 	useEffect(() => {
 		if (isContactDeleted === true) {
-			const allContacts: string | null = localStorage.getItem("allContacts");
+			const localStorageType: string = contactTab === "all" ? "allContacts" : "favoriteContacts";
+			const contacts: string | null = localStorage.getItem(localStorageType);
 
-			if (allContacts !== null) {
-				const allContactsParsed: ContactListType = JSON.parse(allContacts);
-				setContacts(allContactsParsed);
+			if (contacts !== null) {
+				const contactsParsed: ContactListType = JSON.parse(contacts);
+
+				if (contactTab === "all") {
+					setContacts(contactsParsed);
+				}
+
+				if (contactTab === "favorite") {
+					setFavoriteContacts(contactsParsed);
+				}
 			}
 		}
 	}, [isContactDeleted]);
@@ -110,6 +118,7 @@ function Page() {
 
 			{modalContactSelected.isOpen === true && (
 				<ModalDeleteConfirmation
+					currentActiveTab={contactTab}
 					isDeleting={isContactDeleting}
 					onDeleting={setContactDeleting}
 					onClose={setModalContactSelected}

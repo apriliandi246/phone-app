@@ -6,7 +6,7 @@ import { buttonRegular } from "../../../emotion-object-styles/form-groups";
 
 interface Props {
 	activeTab: string;
-	onChangeTab: React.Dispatch<React.SetStateAction<string>>;
+	onChangeTab: React.Dispatch<React.SetStateAction<"all" | "favorite">>;
 }
 
 function Tab({ activeTab, onChangeTab }: Props) {

@@ -7,11 +7,12 @@ import SearchContact from "./components/SearchContact";
 import { SEARCH_CONTACT } from "./grapql-queries/queries";
 
 function Page() {
-	const [contactQuery, setContactQuery] = useState<string>("");
-	const [isSearching, setSearching] = useState<boolean>(false);
 	const [searchContact, { data, loading }] = useLazyQuery(SEARCH_CONTACT, {
 		fetchPolicy: "no-cache"
 	});
+
+	const [contactQuery, setContactQuery] = useState<string>("");
+	const [isSearching, setSearching] = useState<boolean>(false);
 
 	useEffect(() => {
 		document.title = "Phone App - Search Contact";

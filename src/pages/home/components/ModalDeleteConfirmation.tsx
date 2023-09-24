@@ -11,13 +11,21 @@ import { buttonRegular, buttonDanger } from "../../../emotion-object-styles/form
 interface Props {
 	contactId: number;
 	isDeleting: boolean;
+	currentActiveTab: "all" | "favorite";
 	onDeleting: React.Dispatch<React.SetStateAction<boolean>>;
 	onContactDeleted: React.Dispatch<React.SetStateAction<boolean>>;
 	onClose: React.Dispatch<React.SetStateAction<{ isOpen: boolean; contactId: number }>>;
 }
 
-function ModalDeleteConfirmation({ contactId, isDeleting, onClose, onDeleting, onContactDeleted }: Props) {
-	const [deleteContact, { loading, data, error }] = useMutation(DELETE_CONTACT);
+function ModalDeleteConfirmation({
+	contactId,
+	isDeleting,
+	currentActiveTab,
+	onClose,
+	onDeleting,
+	onContactDeleted
+}: Props) {
+	const [deleteContact, { loading }] = useMutation(DELETE_CONTACT);
 
 	useEffect(() => {
 		const body: HTMLElement = document.body;
@@ -40,13 +48,14 @@ function ModalDeleteConfirmation({ contactId, isDeleting, onClose, onDeleting, o
 
 	useEffect(() => {
 		if (loading === false && isDeleting === true) {
-			const contactsString: string | null = localStorage.getItem("allContacts");
+			const localStorageType: string = currentActiveTab === "all" ? "allContacts" : "favoriteContacts";
+			const contactsString = localStorage.getItem(localStorageType);
 
 			if (contactsString !== null) {
 				const contacts: ContactListType = JSON.parse(contactsString);
 				const filteredContacts: ContactListType = contacts.filter((contact) => contact.id !== contactId);
 
-				localStorage.setItem("allContacts", JSON.stringify(filteredContacts));
+				localStorage.setItem(localStorageType, JSON.stringify(filteredContacts));
 			}
 
 			onDeleting(false);
