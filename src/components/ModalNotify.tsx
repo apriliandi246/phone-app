@@ -4,7 +4,13 @@ import { jsx, css } from "@emotion/react/macro";
 
 import { buttonRegular } from "../emotion-object-styles/form-groups";
 
-function ModalNotify({ onClose }: { onClose: () => void }) {
+interface Props {
+	title: string;
+	message: string;
+	onClose: () => void;
+}
+
+function ModalNotify({ title, message, onClose }: Props) {
 	function handleClick() {
 		onClose();
 	}
@@ -12,8 +18,8 @@ function ModalNotify({ onClose }: { onClose: () => void }) {
 	return (
 		<div css={modal.overlay}>
 			<div css={modal.self}>
-				<div css={modal.title}>Contact Deleted</div>
-				<div css={modal.body}>Contact successfully deleted</div>
+				<div css={modal.title}>{title}</div>
+				<div css={modal.body}>{message}</div>
 
 				<button onClick={handleClick} css={[buttonRegular, modal.btnClose]}>
 					Close

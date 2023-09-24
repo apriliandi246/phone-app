@@ -1,17 +1,24 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { useEffect } from "react";
+import { useMutation } from "@apollo/client";
 import { jsx, css } from "@emotion/react/macro";
 
+import { ContactType } from "../types/contactList";
+import { DELETE_CONTACT } from "../grapql-queries/queries";
 import { buttonRegular, buttonDanger } from "../../../emotion-object-styles/form-groups";
 
 interface Props {
+	contactId: number;
 	isDeleting: boolean;
-	onDelete: () => void;
+	onDeleting: React.Dispatch<React.SetStateAction<boolean>>;
+	onContactDeleted: React.Dispatch<React.SetStateAction<boolean>>;
 	onClose: React.Dispatch<React.SetStateAction<{ isOpen: boolean; contactId: number }>>;
 }
 
-function ModalDeleteConfirmation({ isDeleting, onClose, onDelete }: Props) {
+function ModalDeleteConfirmation({ contactId, isDeleting, onClose, onDeleting, onContactDeleted }: Props) {
+	const [deleteContact, { loading, data, error }] = useMutation(DELETE_CONTACT);
+
 	useEffect(() => {
 		const body = document.body;
 		body.style.overflow = "hidden";
@@ -21,15 +28,45 @@ function ModalDeleteConfirmation({ isDeleting, onClose, onDelete }: Props) {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (isDeleting === true) {
+			deleteContact({
+				variables: {
+					id: contactId
+				}
+			});
+		}
+	}, [isDeleting]);
+
+	useEffect(() => {
+		if (loading === false && isDeleting === true) {
+			const contactsString = localStorage.getItem("contacts");
+
+			if (contactsString !== null) {
+				const contacts: ContactType = JSON.parse(contactsString);
+				const filteredContacts = contacts.filter((contact) => contact.id !== contactId);
+
+				localStorage.setItem("contacts", JSON.stringify(filteredContacts));
+			}
+
+			onDeleting(false);
+			onClose({
+				contactId: -1,
+				isOpen: false
+			});
+			onContactDeleted(true);
+		}
+	}, [loading]);
+
 	function handleDeleteClick() {
-		onDelete();
+		onDeleting(true);
 	}
 
 	function handleCancelClick() {
-		onClose((prevState) => ({
-			...prevState,
+		onClose({
+			contactId: -1,
 			isOpen: false
-		}));
+		});
 	}
 
 	return (
@@ -39,19 +76,11 @@ function ModalDeleteConfirmation({ isDeleting, onClose, onDelete }: Props) {
 				<div css={modal.body}>Once you delete this you are not alllowed to restore.</div>
 
 				<div css={modal.menuWrapper}>
-					<button
-						type="button"
-						css={buttonRegular}
-						onClick={handleCancelClick}
-						disabled={isDeleting === true ? true : false}>
+					<button type="button" css={buttonRegular} onClick={handleCancelClick} disabled={isDeleting === true}>
 						Cancel
 					</button>
 
-					<button
-						type="button"
-						css={buttonDanger}
-						onClick={handleDeleteClick}
-						disabled={isDeleting === true ? true : false}>
+					<button type="button" css={buttonDanger} onClick={handleDeleteClick} disabled={isDeleting === true}>
 						{isDeleting === true ? "Loading" : "Delete"}
 					</button>
 				</div>

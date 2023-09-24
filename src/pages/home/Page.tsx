@@ -1,6 +1,5 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Link } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { jsx, css } from "@emotion/react/macro";
 import { Fragment, useEffect, useState } from "react";
@@ -18,6 +17,7 @@ import { GET_CONTACT_LIST } from "./grapql-queries/queries";
 
 function Page() {
 	const [loadContactList, { loading, data, error }] = useLazyQuery(GET_CONTACT_LIST);
+
 	const [contactTab, setContactTab] = useState("all");
 	const [contacts, setContacts] = useState<ContactType>([]);
 	const [isContactDeleted, setContactDeleted] = useState<boolean>(false);
@@ -49,26 +49,15 @@ function Page() {
 	}, [loading]);
 
 	useEffect(() => {
-		let timer: any;
+		if (isContactDeleted === true) {
+			const contacts = localStorage.getItem("contacts");
 
-		if (modalContactSelected.contactId !== -1 && isContactDeleting === true) {
-			timer = setTimeout(() => {
-				console.log("Delete contact with ID: ", modalContactSelected.contactId);
-
-				setModalContactSelected({ isOpen: false, contactId: -1 });
-				setContactDeleting(false);
-				setContactDeleted(true);
-			}, 2500);
+			if (contacts !== null) {
+				const contactList = JSON.parse(contacts);
+				setContacts(contactList);
+			}
 		}
-
-		return () => {
-			clearTimeout(timer);
-		};
-	}, [isContactDeleting]);
-
-	function deleteContact() {
-		setContactDeleting(true);
-	}
+	}, [isContactDeleted]);
 
 	function closeModalDeleteNotify() {
 		setContactDeleted(false);
@@ -108,13 +97,17 @@ function Page() {
 
 			{modalContactSelected.isOpen === true && (
 				<ModalDeleteConfirmation
-					onDelete={deleteContact}
 					isDeleting={isContactDeleting}
+					onDeleting={setContactDeleting}
 					onClose={setModalContactSelected}
+					onContactDeleted={setContactDeleted}
+					contactId={modalContactSelected.contactId}
 				/>
 			)}
 
-			{isContactDeleted === true && <ModalNotify onClose={closeModalDeleteNotify} />}
+			{isContactDeleted === true && (
+				<ModalNotify title="Contact Deleted" message="Contact successfully deleted" onClose={closeModalDeleteNotify} />
+			)}
 		</Fragment>
 	);
 }
