@@ -4,10 +4,10 @@
 
 Tech Stacks:
 
-- Typescript
-- React JS (Create React App)
-- Emotion JS
-- Grapql and @apollo/client
+- Typescript (Javascript types)
+- React JS (Create React App) (UI Library)
+- Emotion JS (CSS)
+- Grapql and @apollo/client (Fetching data)
 
 <br>
 
